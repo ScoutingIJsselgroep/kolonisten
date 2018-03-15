@@ -1,0 +1,281 @@
+@import url(https://fonts.googleapis.com/css?family=Tangerine);
+
+* {
+	box-sizing: border-box;
+	font-family: Verdana, Geneva, sans-serif;
+}
+html,
+body {
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: "Times New Roman", Times, serif;
+	position: relative;
+	height: 100%;
+}
+
+html {
+	min-height: 100%;
+	background: url(../img/sunset.jpg) center center / cover no-repeat fixed #cc3333;
+}
+body {
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+h1, h2, h3 {
+	font-family: 'Tangerine', serif;
+	text-shadow: 4px 4px 4px #aaa;
+	font-weight: normal;
+}
+
+h1 {
+	font-size: 45px;
+}
+
+a {
+	color: #EBE3CD;
+	text-shadow: 0px 0px 2px #000;
+}
+a:hover,
+a:focus {
+	color: #aaa;
+}
+table {
+	min-width: 100%;
+	background: rgba(255, 255, 255, 0.5);
+	box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.5);
+}
+
+.background table {
+	background: none;
+	box-shadow: none;
+}
+table th,
+table td {
+	text-align: left;
+	vertical-align: top;
+}
+table th.right,
+table td.right {
+	text-align: right;
+}
+.background {
+	background: rgba(255, 255, 255, 0.5);
+	box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.5);
+	padding: 25px 15px;
+}
+.content {
+	padding: 15px;
+}
+#map {
+	height: 400px;
+}
+#map.full {
+	height: 100%;
+	min-height: 400px;
+}
+
+.content .home {
+	text-align: center;
+	padding-bottom: 60px;
+}
+#refresh {
+	position: fixed;
+	top: 5px;
+	left: 5px;
+}
+#refresh #loader { fill: #EBE3CD }
+#refresh #border { fill: #8F7C74 }
+
+#teams,
+#team,
+#info {
+	position: fixed;
+	top: 5px;
+	right: 5px;
+	color: #8F7C74;
+	background: #EBE3CD;
+	height: 40px;
+	width: 40px;
+	border-radius: 20px;
+	line-height: 32px;
+	font-size: 32px;
+	text-align: center;
+	padding: 4px;
+	text-shadow: none;
+}
+#team {
+	top: 50px;
+}
+#teams {
+	top: 95px;
+}
+td.progress {
+	height: 22px;
+	position: relative;
+	padding: 0 0 0 25px;
+}
+td.progress img {
+	height: 40px;
+	width: 40px;
+	position: absolute;
+	left: 0;
+	top: -22px;
+}
+.admin-menu {
+	position: fixed;
+	top: 15px;
+	left: 60px;
+	right: 60px;
+	z-index: 3;
+}
+.admin-menu a {
+	display: block;
+	float: left;
+	margin: 0 15px 0 0;
+}
+
+.elements,
+.teams {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 5px;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#dfd2ae+0,dfd2ae+100&0+0,1+100 */
+	background: -moz-linear-gradient(top, rgba(223,210,174,0) 0%, rgba(223,210,174,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(223,210,174,0) 0%,rgba(223,210,174,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(223,210,174,0) 0%,rgba(223,210,174,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.elements .element,
+.teams .team {
+	width: 16.6666666%;
+	display: block;
+	float: left;
+	height: 46px;
+	line-height: 44px;
+	text-align: center;
+	position: relative;
+}
+.teams .team {
+	width: 25%;
+}
+.elements .element:before,
+.teams .team:before {
+	content: '';
+	display: block;
+	width: 46px;
+	height: 46px;
+	border-radius: 23px;
+	background: rgba(255, 255, 255, 0.7);
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: -23px;
+	z-index: 1;
+}
+.elements .element img,
+.teams .team img {
+	max-width: 40px;
+	max-height: 40px;
+	vertical-align: middle;
+	position: relative;
+	z-index: 2;
+}
+.teams .team img {
+	cursor: pointer;
+}
+.elements .element span.amount {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: 10px;
+	z-index: 3;
+	background: rgba(255, 55, 55, 0.5);
+	min-width: 16px;
+	text-align: center;
+	padding: 0 4px;
+	height: 16px;
+	border-radius: 8px;
+	line-height: 16px;
+	font-size: 14px;
+}
+
+form {
+	max-width: 991px;
+	margin: 15px auto 0 auto;
+	padding: 15px;
+}
+form.full {
+	max-width: none;
+	margin: 0;
+	padding: 0;
+}
+form > div {
+	margin: 0 0 15px 0;
+}
+form label {
+	float: left;
+	width: 20%;
+	padding: 5px 10px;
+	line-height: 21px;
+}
+form input,
+form select,
+form textarea {
+	border: 1px solid #DFD2AE;
+	background: #FDFCF8;
+	padding: 3px 8px;
+	line-height: 21px;
+}
+form input:read-only,
+form textarea:read-only,
+form input:disabled,
+form textarea:disabled {
+	background: #EBE3CD;
+}
+form input,
+form select {
+	float: left;
+	width: 80%;
+}
+form textarea {
+	clear: left;
+	width: 100%;
+	height: 60px;
+	resize: vertical;
+}
+form input:focus,
+form select:focus,
+form textarea:focus {
+	border-color: #F8C967;
+	-webkit-box-shadow: 0px 0px 5px 1px #8F7C74;
+	-moz-box-shadow: 0px 0px 5px 1px #8F7C74;
+	box-shadow: 0px 0px 5px 1px #8F7C74;
+	outline: none;
+}
+form.full table input {
+	width: 50px;
+	float: right;
+}
+
+.costs img {
+	height: 22px;
+	width: 22px;
+    display: inline-block;
+    line-height: 22px;
+    vertical-align: middle;
+}
+
+.floating-img img {
+	float: left;
+	max-width: 100%;
+	margin-right: 10px;
+}
