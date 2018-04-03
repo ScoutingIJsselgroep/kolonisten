@@ -33,8 +33,6 @@ class UsersController extends Controller
 				})->where('locations.available', '<', Carbon::now()->format('H:i:s'))
 				->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->get()
 			]);
-		} else if(Carbon::now()->lt(Carbon::create(2018, 3, 3, 19, 30, 0))) {
-			return view('users.countdown');
 		} else {
 			return view('users.home');
 		}

@@ -3,14 +3,14 @@
 @section('content')
 <div class="content">
 	<div class="home">
-		<h1>Project 2C</h1>
+		<h1>St. Jorisdag 2018</h1>
 
-		<p>Welkom bij Project 2C.</p>
-		<p>Op 3 maart 2018 zullen we dit spel met de stam van scouting IJsselgroep gaan spelen.</p>
+		<p>Rond 23 april vieren we bij scouting IJsselgroep <i>Sint Jorisdag</i>.</p>
+		<p>Dit keer met dit interactive spel.</p>
 		<p>Bereid je voor:<br />
 			<a href="https://play.google.com/store/apps/details?id=com.google.zxing.client.android" target="_blank">Download alvast een QR code scanner</a>.</p>
 		<p>Scan de QR code om je groep mee aan te melden, en doe mee!</p>
-		<h2>Jasper &amp; Dennis</h2>
+		<h2>Groeten,<br />De leiding van de Ijsselgroep</h2>
 
 		<div class="elements clearfix">
 		@foreach(\App\Models\Location::getElements() as $element => $name)

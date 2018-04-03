@@ -30,12 +30,12 @@ class Location extends Model {
 	//put your code here
 	public static function getElements() {
 		return [
-			'wood' => 'Hout',
-			'stone' => 'Steen',
-			'copper' => 'Koper',
-			'corn' => 'Graan',
-			'hop' => 'Hop',
-			'yeast' => 'Gist'
+			'harnas' => 'Harnas',
+			'helm' => 'Helm',
+			'schild' => 'Schild',
+			'zwaard' => 'Zwaard',
+			'paard' => 'Paard',
+			'wortel' => 'Wortel'
 		];
 	}
 	
