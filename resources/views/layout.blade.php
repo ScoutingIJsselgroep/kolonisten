@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<base href="{{ url('/') }}">
 		
-        <title>Project 2C | Scouting IJsselgroep</title>
+        <title>St. Jorisdag | Scouting IJsselgroep</title>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css" integrity="sha384-BGv6NDAkuWxBoOcrFAufJ34dwDag61ithadL8KVUIL6w+qJaIOxImfBJpSG7LbtM" crossorigin="anonymous">
         <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
