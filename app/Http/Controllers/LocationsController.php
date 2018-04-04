@@ -111,7 +111,7 @@ class LocationsController extends Controller
 		imagesavealpha($img, true);
 		
 		$element = imagecreatefrompng(public_path('img/' . $location->element . '.png'));
-		imagecopyresampled($img, $element, 5, 0, 0, 0, 30, 30, 100, 100);
+		imagecopyresampled($img, $element, 5, 0, 0, 0, 30, 30, 40, 40);
 		imagedestroy($element);
 		imagesavealpha($img, true);
 		

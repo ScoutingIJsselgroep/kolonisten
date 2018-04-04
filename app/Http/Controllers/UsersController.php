@@ -274,7 +274,7 @@ class UsersController extends Controller
 			if($userLocation && $step !== null) {
 				// al gescand
 				$element = imagecreatefrompng(public_path('img/' . strtolower($userLocation->name) . '.png'));
-				imagecopyresampled($img, $element, 5, 0, 0, 0, 30, 30, 100, 100);
+				imagecopyresampled($img, $element, 5, 0, 0, 0, 30, 30, 40, 40);
 				imagedestroy($element);
 				imagesavealpha($img, true);
 				
@@ -300,7 +300,7 @@ class UsersController extends Controller
 			if($userLocation && $step !== null) {
 				// al gescand
 				$element = imagecreatefrompng(public_path('img/' . $location->element . '.png'));
-				imagecopyresampled($img, $element, 5, 0, 0, 0, 30, 30, 100, 100);
+				imagecopyresampled($img, $element, 5, 0, 0, 0, 30, 30, 40, 40);
 				imagedestroy($element);
 				imagesavealpha($img, true);
 				
