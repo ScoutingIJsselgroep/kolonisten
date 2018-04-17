@@ -30,8 +30,8 @@ class UsersController extends Controller
 				'locations' => Location::leftJoin('user_locations', function($join) use ($user) {
 					$join->on('user_locations.location_id', '=', 'locations.id')
 							->where('user_locations.user_id', '=', $user->id);
-				})->where('locations.available', '<', Carbon::now()->format('H:i:s'))
-				->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->get()
+				})->whereIn('locations.id', $user->availableLocations())
+				->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.buy')->get()
 			]);
 		} else {
 			return view('users.home');
@@ -64,15 +64,9 @@ class UsersController extends Controller
 		foreach(Location::leftJoin('user_locations', function($join) use ($user) {
 				$join->on('user_locations.location_id', '=', 'locations.id')
 						->where('user_locations.user_id', '=', $user->id);
-			})->where('locations.available', '<', Carbon::now()->format('H:i:s'))
-			->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->get() as $location) {
-			if($location->cafe) {
-				$step = 4;
-			} else if($location->bb) {
-				$step = 3;
-			} else if($location->house) {
-				$step = 2;
-			} else if($location->flag) {
+			})->whereIn('locations.id', $user->availableLocations())
+			->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.buy')->get() as $location) {
+			if($location->buy) {
 				$step = 1;
 			} else if($location->scan) {
 				$step = 0;
@@ -90,10 +84,30 @@ class UsersController extends Controller
 			];
 		}
 		
+		// alle elementen? Dan de draak locatie tonen
+		$hasAll = true;
+		$hasElements = $user->hasElements();
+		foreach($hasElements as $check) {
+			if(!$check) {
+				$hasAll = false;
+				break;
+			}
+		}
+		if($hasAll) {
+			$locations[] = [
+				'id' => 0,
+				'element' => 'draak',
+				'step' => null,
+				'name' => 'Draak',
+				'lat' => 52.19690360262851,
+				'lng' => 6.2151158749220485
+			];
+		}
+		
 		// je huidige elementen
 		return [
 			'locations' => $locations,
-			'elements' => $user->countElements(),
+			'elements' => $hasElements,
 			'winner' => (User::getWinner() ? true : false)
 		];
 	}
@@ -143,7 +157,7 @@ class UsersController extends Controller
 		}
 	}
 	
-	public function build(Request $request, Location $location, $type) {
+	public function buy(Request $request, Location $location) {
 		if($request->session()->has('user')) {
 			$user = User::find($request->session()->get('user'));
 			if($user->lock !== $request->session()->get('user_lock')) {
@@ -161,104 +175,38 @@ class UsersController extends Controller
 					'error' => 'Helaas',
 					'message' => 'Deze plek moet je nog ontdekken' 
 				]);
-			} else if($type == 'flag') {
-				if(!$userLocation->flag) {
-					$userLocation->flag = Carbon::now();
+			} else {
+				if(!$userLocation->buy) {
+					$userLocation->buy = Carbon::now();
 					$userLocation->save();
+					
+					// zijn alle spullen gekocht, dan mag de draak worden gezocht
+					foreach($user->hasElements() as $check) {
+						if(!$check) {
+							return redirect()->to('/')->with([
+								'title' => 'Gefeliciteerd!',
+								'message' => 'Je bent nu in het bezit van een ' . $location->elementName()
+							]);
+						}
+					}
 					
 					return redirect()->to('/')->with([
 						'title' => 'Gefeliciteerd!',
-						'message' => 'Je ontvangt nu iedere 3 minuten een extra ' . $location->elementName()
+						'message' => 'Je bezit nu alles wat nodig is om de draak te verslaan! Je kunt hem gaan zoeken'
 					]);
-				}
-			} else {
-				$otherUserLocation = UserLocation::where('user_id', '<>', $request->session()->get('user'))
-					->where('location_id', '=', $location->id)
-					->whereNotNull('house')->first();
-				if($otherUserLocation) {
-					return redirect()->to('/')->with([
-						'error' => 'Helaas',
-						'message' => 'Team ' . $otherUserLocation->user->name . ' heeft hier al gebouwd' 
-					]);
-				} else if($type == 'house') {
-					if(!$userLocation->flag) {
-						return redirect()->to('/')->with([
-							'error' => 'Helaas',
-							'message' => 'Je moet hier eerst een vlag plaatsen' 
-						]);
-					} else if(!$userLocation->house) {
-						$userLocation->house = Carbon::now();
-						$userLocation->save();
-						
-						if($user->countHouses()==1) {
-							return redirect()->to('/team')->with([
-								'title' => 'Gefeliciteerd!',
-								'message' => 'Je eerste huis, je kunt een cadeau ophalen, kijk bij de teampagina, voor meer info. Je ontvangt nu iedere 2 minuten een extra ' . $location->elementName()
-							]);
-						} else {
-							return redirect()->to('/')->with([
-								'title' => 'Gefeliciteerd!',
-								'message' => 'Je ontvangt nu iedere 2 minuten een extra ' . $location->elementName()
-							]);
-						}
-					}
-				} else if($type == 'bb') {
-					if(!$userLocation->house) {
-						return redirect()->to('/')->with([
-							'error' => 'Helaas',
-							'message' => 'Je moet hier eerst een huis bouwen' 
-						]);
-					} else if(!$userLocation->bb) {
-						$userLocation->bb = Carbon::now();
-						$userLocation->save();
-						
-						// is het de eerste dan excursie bij de hoek
-						
-						if($user->countBbs()==1) {
-							return redirect()->to('/team')->with([
-								'title' => 'Gefeliciteerd!',
-								'message' => 'Je eerste bed en breakfast, je kunt een cadeau ophalen, kijk bij de teampagina, voor meer info. Je ontvangt nu iedere minuut een extra ' . $location->elementName()
-							]);
-						} else {
-							return redirect()->to('/')->with([
-								'title' => 'Gefeliciteerd!',
-								'message' => 'Je ontvangt nu iedere minuut een extra ' . $location->elementName()
-							]);
-						}
-					}
-				} else if($type == 'cafe') {
-					if(!$userLocation->bb) {
-						return redirect()->to('/')->with([
-							'error' => 'Helaas',
-							'message' => 'Je moet hier eerst een B&ampB bouwen' 
-						]);
-					} else if(!$userLocation->cafe) {
-						$userLocation->cafe = Carbon::now();
-						$userLocation->save();
-						
-						if($user->countCafes()==2) {
-							if($user->id == User::getWinner()) {
-								return redirect()->to('/team')->with([
-									'title' => 'Hulde!',
-									'message' => 'Jullie hebben het doel gehaald, en twee caf&eacute;s geopend'
-								]);
-							} else {
-								return redirect()->to('/team')->with([
-									'title' => 'Ah, zo geoefend thuis!',
-									'message' => 'Jullie hebben het doel gehaald, en twee caf&eacute;s geopend. Maar helaas, was een ander team jullie voor'
-								]);
-							}
-						}
-						
-						return redirect()->to('/')->with([
-							'title' => 'Gefeliciteerd!',
-							'message' => 'Je ontvangt nu iedere halve minuut een extra ' . $location->elementName()
-						]);
-					}
 				}
 			}
 		}
 		return redirect()->to('/');
+	}
+	public function iconDragon() {
+		$img = imagecreatefrompng(public_path('img/draakje.png'));
+		imagesavealpha($img, true);
+		
+		header('Content-Type: image/png');
+		imagepng($img);
+		imagedestroy($img);
+		die();
 	}
 	
 	public function icon(Request $request, Location $location, $step = null, $team = false) {
@@ -270,7 +218,7 @@ class UsersController extends Controller
 					$join->on('user_locations.user_id', '=', 'users.id');
 				})->whereNotNull('user_locations.house')
 					->where('location_id', '=', $location->id)
-					->select('users.name', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->first();
+					->select('users.name', 'user_locations.scan', 'user_locations.buy')->first();
 			if($userLocation && $step !== null) {
 				// al gescand
 				$element = imagecreatefrompng(public_path('img/' . strtolower($userLocation->name) . '.png'));
@@ -278,6 +226,7 @@ class UsersController extends Controller
 				imagedestroy($element);
 				imagesavealpha($img, true);
 				
+				/*
 				// al iets gebouwd
 				if($userLocation->cafe) {
 					$p = imagecreatefrompng(public_path('img/p' . 4 . '.png'));
@@ -291,7 +240,7 @@ class UsersController extends Controller
 					$p = imagecreatefrompng(public_path('img/p' . 2 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
-				}
+				}*/
 			}
 			
 		} else if($request->session()->has('user')) {
@@ -335,8 +284,44 @@ class UsersController extends Controller
 		// $request;
 		
 		return view('users.index', [
-			'users' => User::all()
+			'users' => User::leftJoin('user_locations', function($join) {
+				$join->on('user_locations.user_id', '=', 'users.id');
+			})->orderByRaw('count(user_locations.buy) desc')
+					->orderByRaw('count(user_locations.id) desc')
+					->groupBy('users.id')->select('users.*')->get()
 		]);
+	}
+	
+	public function teams(Request $request) {
+		if($request->session()->has('user')) {
+			$user = User::find($request->session()->get('user'));
+			if($user->lock !== $request->session()->get('user_lock')) {
+				$request->session()->flush();
+				return redirect()->to('/')->with([
+					'error' => 'Afgemeld',
+					'message' => 'Je bent afgemeld door de spelleiding' 
+				]);
+			}
+			
+			return view('users.teams', [
+				'self' => $user,
+				'users' => User::leftJoin('user_locations', function($join) {
+					$join->on('user_locations.user_id', '=', 'users.id');
+				})->orderByRaw('ISNULL(draak), draak asc')
+						->orderByRaw('count(user_locations.buy) desc')
+						->orderByRaw('count(user_locations.id) desc')
+						->groupBy('users.id')->select('users.*')->get()
+			]);
+		} else {
+			return redirect()->to('/');
+		}
+	}
+	
+	public function add(Request $request) {
+		$user = new User;
+		$user->name = $request->name;
+		
+		return redirect()->back();
 	}
 	
 	public function unlock(Request $request, User $user) {
@@ -347,11 +332,11 @@ class UsersController extends Controller
 		return redirect()->back();
 	}
 	
-	public function score(Request $request, User $user, $element, $amount) {
+	public function score(Request $request, User $user, $amount) {
 		// $request;
-		$user->{$element} = $amount;
+		$user->henx = $amount;
 		$user->save();
 		
-		return ['amount' => $user->countElement($element)];
+		return ['amount' => $user->countHenx()];
 	}
 }

@@ -25,44 +25,15 @@ class UserLocation extends Model {
      */
     protected $dates = [
 		'scan',
-		'flag',
-		'house',
-		'bb',
-		'cafe'
+		'buy'
 	];
     public static $costs = [
-		'flag' => [
-			'wood' => 1,
-			'stone' => 0,
-			'copper' => 0,
-			'corn' => 0,
-			'hop' => 0,
-			'yeast' => 0
-		],
-		'house' => [
-			'wood' => 6,
-			'stone' => 8,
-			'copper' => 2,
-			'corn' => 0,
-			'hop' => 0,
-			'yeast' => 0
-		],
-		'bb' => [
-			'wood' => 4,
-			'stone' => 6,
-			'copper' => 3,
-			'corn' => 3,
-			'hop' => 0,
-			'yeast' => 0
-		],
-		'cafe' => [
-			'wood' => 2,
-			'stone' => 6,
-			'copper' => 8,
-			'corn' => 5,
-			'hop' => 5,
-			'yeast' => 5
-		]
+		'wortel' => 1,
+		'helm' => 2,
+		'schild' => 3,
+		'zwaard' => 4,
+		'harnas' => 5,
+		'paard' => 6
 	];
 	public function user() {
 		return $this->belongsTo(User::class);

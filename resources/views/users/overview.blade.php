@@ -7,16 +7,19 @@
 	<path id="border" transform="translate(20, 20)"/>
 	<path id="loader" transform="translate(20, 20) scale(.80)"/>
 </svg>
+<span id="henx">
+	<img src="img/henx.png">
+	<span class="amount">{{ $user->countHenx() }}</span>
+</span>
 
 <a id="info" href="info"><i class="fa fa-question" aria-hidden="true"></i></a>
-<a id="team" href="team"><i class="fa fa-user" aria-hidden="true"></i></a>
 <a id="teams" href="teams"><i class="fa fa-users" aria-hidden="true"></i></a>
 
 <div class="elements clearfix">
 @foreach(\App\Models\Location::getElements() as $element => $name)
 <div class="element">
 	<img src="img/{{ $element }}.png">
-	<span class="amount" id="{{ $element }}">{{ $user->countElement($element) }}</span>
+	<span class="amount{{ $user->hasElement($element) ? ' buyed' : '' }}" id="{{ $element }}"></span>
 </div>
 @endforeach
 </div>
@@ -26,6 +29,7 @@
 <script>
 var map,
 	locations = [],
+	henx = {{ $user->countHenx() }},
 	stock = {},
 	elements = {
 		'unknown': 'Onbekend'
@@ -33,7 +37,7 @@ var map,
 	costs = {!! json_encode(\App\Models\UserLocation::$costs) !!};
 @foreach(\App\Models\Location::getElements() as $element => $name)
 elements.{{ $element }} = '{{ $name }}';
-stock.{{ $element }} = {{ $user->countElement($element) }};
+stock.{{ $element }} = {{ $user->hasElement($element) ? 'true' : 'false' }};
 @endforeach
 
 function initMap() {
@@ -107,73 +111,24 @@ function initMap() {
 			stopAnimations();
 			l.marker.setAnimation(google.maps.Animation.BOUNCE);
 			
-			if(l.step == 4) {
+			if(l.step == 1 || (l.element != 'unknown' && stock[l.element])) {
 				$.alert({
 					theme: 'supervan',
-					title: 'Deze locatie is helmaal uitgebouwd',
-					content: 'Met dit caf&eacute; krijg je elke 3 minuten, 2 minuten, elke minuut en elke halve minuut een ' + elements[l.element] + ' erbij.',
+					title: 'Je hebt al een ' + elements[l.element] + ' in je bezit',
+					content: 'Beter geef je je Henx aan wat nuttigs uit.',
 					buttons: {
-						'Mooi, kom maar op met dat spul': stopAnimations
+						'Mooi, ik zat even niet op te letten': stopAnimations
 					}
-				});
-			} else if(l.step === 3) {
-				$.alert({
-					theme: 'supervan',
-					title: 'Caf&eacute; erbij op deze locatie?',
-					content: 'Met een caf&eacute; krijg je elke halve minuut een extra ' + elements[l.element] + ' erbij.' + 
-							'<div>Het uitbouwen kost:</div><div class="costs">' + costList('cafe') + '</div>' +
-							(costCheck('cafe') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('cafe') ? {
-						'Ja, lijkt me super': function(){
-							location.href = '/users/build/' + l.id + '/cafe';
-						},
-						'Nu nog niet': stopAnimations
-					} : {
-						'Ah, jammer': stopAnimations
-					})
-				});
-			} else if(l.step === 2) {
-				$.alert({
-					theme: 'supervan',
-					title: 'Bed en breakfast erbij op deze locatie?',
-					content: 'Met een bed en breakfast krijg je elke minuut een extra ' + elements[l.element] + ' erbij.' + 
-							'<div>Het verbouwen kost:</div><div class="costs">' + costList('bb') + '</div>' +
-							(costCheck('bb') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('bb') ? {
-						'Ja, bouw maar uit': function(){
-							location.href = '/users/build/' + l.id + '/bb';
-						},
-						'Nu nog niet': stopAnimations
-					} : {
-						'Ah, jammer': stopAnimations
-					})
-				});
-			} else if(l.step === 1) {
-				$.alert({
-					theme: 'supervan',
-					title: 'Huis plaatsen op deze locatie?',
-					content: 'Met een huis krijg je elke 2 minuten een extra ' + elements[l.element] + ' erbij.' + 
-							'<div>Het bouwen kost:</div><div class="costs">' + costList('house') + '</div>' +
-							(costCheck('house') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('house') ? {
-						'Ja, hier wil ik een huis': function(){
-							location.href = '/users/build/' + l.id + '/house';
-						},
-						'Nu nog niet': stopAnimations
-					} : {
-						'Ah, jammer': stopAnimations
-					})
 				});
 			} else if(l.step === 0) {
 				$.alert({
 					theme: 'supervan',
-					title: 'Vlag plaatsen op deze locatie?',
-					content: 'Met een vlag krijg je elke 3 minuten een ' + elements[l.element] + ' erbij.' + 
-							'<div>Het plaatsen kost:</div><div class="costs">' + costList('flag') + '</div>' +
-							(costCheck('flag') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('flag') ? {
-						'Ja, planten dat ding': function(){
-							location.href = '/users/build/' + l.id + '/flag';
+					title: elements[l.element] + ' kopen op deze locatie?',
+					content: 'Het kost: ' + costs[l.element] + ' Henx' +
+							(costs[l.element] <= henx ? '' : '<div>Op dit moment heb je niet genoeg Henx, Je hebt er nu ' + henx + ' in de spaarpot. Vind meer locaties, en verdien zo extra Henx!</div>'),
+					buttons: (costs[l.element] <= henx ? {
+						'Ja, kopen dat ding': function(){
+							location.href = '/users/buy/' + l.id;
 						},
 						'Nu nog niet': stopAnimations
 					} : {
@@ -184,7 +139,7 @@ function initMap() {
 				$.alert({
 					theme: 'supervan',
 					title: 'Vind eerst de code op deze locatie',
-					content: 'Heb je hem gevonden, en gescand, dan krijg je er meteen 2 grondstoffen bij, en kun je een vlag plaatsen.',
+					content: 'Heb je hem gevonden, en gescand, dan krijg je er meteen 2 Henx bij, en je kunt zien wat je hier kan kopen.',
 					buttons: {
 						'Okay, we gaan al zoeken': stopAnimations
 					}
@@ -251,7 +206,7 @@ function initMap() {
 	  , border = document.getElementById('border')
 	  , α = 360
 	  , π = Math.PI
-	  , t = 30/360*1000;
+	  , t = 60/360*1000;
 
 	(function draw() {
 		α--;

@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class LocationsController extends Controller
 {
 	public function qr(Request $request, $qr) {
-		$location = Location::where('code', '=', $qr)->where('locations.available', '<', Carbon::now()->format('H:i:s'))->first();
+		$location = Location::where('code', '=', $qr)->first();
 		if($location) {
 			if($request->has('confirm')) {
 				if($request->session()->has('user')) {
@@ -21,6 +21,13 @@ class LocationsController extends Controller
 						return redirect()->to('/')->with([
 							'error' => 'Afgemeld',
 							'message' => 'Je bent afgemeld door de spelleiding' 
+						]);
+					}
+					
+					if(!in_array($location->id, $user->availableLocations())) {
+						return redirect()->to('/')->with([
+							'error' => 'Locatie niet gevonden',
+							'message' => 'Misschien later in het spel' 
 						]);
 					}
 					
@@ -34,7 +41,7 @@ class LocationsController extends Controller
 						
 						return redirect()->to('/')->with([
 							'title' => 'Locatie ' . $location->name . ' gevonden',
-							'message' => 'Gefeliciteerd met het vinden van deze locatie! Jullie verdienen 2 ' . \App\Models\Location::getElements()[$location->element]
+							'message' => 'Gefeliciteerd met het vinden van deze locatie! Jullie 1 Henk'
 						]);
 					}
 					return redirect()->to('/')->with([
@@ -61,7 +68,47 @@ class LocationsController extends Controller
 		}
 	}
 	
-	
+	public function qrDraak(Request $request) {
+		if($request->has('confirm')) {
+			if($request->session()->has('user')) {
+				$user = User::find($request->session()->get('user'));
+				if($user->lock !== $request->session()->get('user_lock')) {
+					$request->session()->flush();
+					return redirect()->to('/')->with([
+						'error' => 'Afgemeld',
+						'message' => 'Je bent afgemeld door de spelleiding' 
+					]);
+				}
+				
+				foreach($user->hasElements() as $check) {
+					if(!$check) {
+						return redirect()->to('/')->with([
+							'error' => 'Locatie niet gevonden',
+							'message' => 'Misschien later in het spel' 
+						]);
+					}
+				}
+				
+				$user->draak = Carbon::now();
+				$user->save();
+
+				return redirect()->to('/teams')->with([
+					'title' => 'Jullie hebben de draak gevonden en verslagen!',
+					'message' => 'In het team overzicht zie je hoeveelste je bent geworden'
+				]);
+			} else {
+				return redirect()->to('/')->with([
+					'error' => 'Team onbekend',
+					'message' => 'Meld je eerst aan' 
+				]);
+			}
+		} else {
+			return view('continue', [
+				'title' => 'Draak gevonden',
+				'link' => $request->url . '?confirm'
+			]);
+		}
+	}
 	
 	
 	public function index(Request $request) {
@@ -119,22 +166,5 @@ class LocationsController extends Controller
 		imagepng($img);
 		imagedestroy($img);
 		die();
-	}
-	
-	public function teams(Request $request) {
-		if($request->session()->has('user')) {
-			$user = User::find($request->session()->get('user'));
-		} else {
-			$user = false;
-		}
-		return view('locations.teams', [
-			'user' => $user,
-			'locations' => Location::leftJoin('user_locations', function($join) {
-				$join->on('user_locations.location_id', '=', 'locations.id')
-						->whereNotNull('user_locations.house');
-			})->leftJoin('users', function($join) {
-				$join->on('user_locations.user_id', '=', 'users.id');
-			})->where('locations.available', '<', Carbon::now()->format('H:i:s'))->select('locations.*', 'users.name', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->get()
-		]);
 	}
 }

@@ -15,10 +15,7 @@
 				@endforeach
 				
 				<th class="right">Scans</th>
-				<th class="right">Vlaggen</th>
-				<th class="right">Huizen</th>
-				<th class="right">B&amp;B&#39;s</th>
-				<th class="right">Cafe&#39;s</th>
+				<th colspan="2">Henx</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -36,16 +33,14 @@
 				
 				@foreach(\App\Models\Location::getElements() as $element => $name)
 				<td class="right">
-					<div class="clearfix"><input type="number" class="scored" data-target="{{ $element }}_{{ $user->id }}" data-url="users/{{ $user->id }}/score/{{ $element }}/" name="{{ $element }}[{{ $user->id }}]" value="{{ $user->{$element} }}"></div>
-					<div id="{{ $element }}_{{ $user->id }}">{{ $user->countElement($element) }}</div>
+					<div class="clearfix"></div>
+					<div><i class="fa {{ $user->hasElement($element) ? 'fa-check-circle-o' : 'fa-circle-o' }}" aria-hidden="true"></i></div>
 				</td>
 				@endforeach
 				
 				<td class="right">{{ $user->countScans() }}</td>
-				<td class="right">{{ $user->countFlags() }}</td>
-				<td class="right">{{ $user->countHouses() }}</td>
-				<td class="right">{{ $user->countBbs() }}</td>
-				<td class="right">{{ $user->countCafes() }}</td>
+				<td class="right" id="henx_{{ $user->id }}">{{ $user->countHenx() }}</td>
+				<td><input type="number" class="scored" data-target="henx_{{ $user->id }}" data-url="users/{{ $user->id }}/henx/" name="henx[{{ $user->id }}]" value="{{ $user->henx }}"></td>
 			</tr>
 			@endforeach
 		</tbody>

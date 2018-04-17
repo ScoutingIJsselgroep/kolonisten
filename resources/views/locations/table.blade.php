@@ -5,6 +5,7 @@
 	<table>
 		<thead>
 			<tr>
+				<th>#</th>
 				<th>Naam</th>
 				<th>Code</th>
 				<th>Element</th>
@@ -12,8 +13,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($locations as $location)
+			@foreach($locations as $i => $location)
 			<tr>
+				<td>{{ $i }}</td>
 				<td>{{ $location->name }}</td>
 				<td><a href="l/{{ $location->code }}">{!! QrCode::size(100)->generate(url('l/' . $location->code)) !!}</a></td>
 				
