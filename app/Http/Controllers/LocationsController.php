@@ -56,7 +56,7 @@ class LocationsController extends Controller
 				}
 			} else {
 				return view('continue', [
-					'title' => 'Locatie ' . $location->name . ' gevonden',
+					'title' => 'Locatie gevonden',
 					'link' => $request->url . '?confirm'
 				]);
 			}

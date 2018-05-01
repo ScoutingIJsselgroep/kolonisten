@@ -192,7 +192,7 @@ class UsersController extends Controller
 					
 					return redirect()->to('/')->with([
 						'title' => 'Gefeliciteerd!',
-						'message' => 'Je bezit nu alles wat nodig is om de draak te verslaan! Je kunt hem gaan zoeken'
+						'message' => 'Je bezit nu alles wat nodig is om de draak te verslaan! Haal de fiets op en ga hem zoeken'
 					]);
 				}
 			}

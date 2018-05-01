@@ -12,7 +12,7 @@
 <p>In de buurt van waar de markers op de kaart staan vind je een QR code.
 	Heb je de gevonden, scan je hem, en je verdiend daarmee Henx, ook kom je er achter wat je op die locatie kan kopen. 
 	Heb je een locatie gescand, dan komen de twee dichtstbijzijnde locaties bij op de kaart (tot je alle locaties ontgrendeld hebt), en kun je die ook gaan zoeken.</p>
-
+<p>Voor je de draak gaat zoeken, haal eerst de fiets op. Mocht het 16:45 zijn haal dan iig de fiets op, en ga naar het troephuis.</p>
 <table>
 	<tr>
 		<th colspan="2">Benodigd</th>

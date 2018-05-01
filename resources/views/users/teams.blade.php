@@ -5,12 +5,14 @@
 
 <div class="content">
 <div class="background">
+	<h1>Klassement</h1>
+	<p>Hoe sta je er voor ten op zichte van de andere teams?</p>
 	<table class="teamscore">
 		<thead>
 			<tr>
 				<th class="rotate"><div><span>Naam</span></div></th>
 				@foreach(\App\Models\Location::getElements() as $element => $name)
-				<th class="rotate"><div><span>{{ $name }}</span></div></th>
+				<th class="rotate small"><div><span>{{ $name }}</span></div></th>
 				@endforeach
 				<th class="rotate"><div><span>Henx</span></div></th>
 				<th class="rotate"><div><span>Draak</span></div></th>
@@ -22,13 +24,13 @@
 				<td>{{ $user->name }}</td>
 				
 				@foreach(\App\Models\Location::getElements() as $element => $name)
-				<td>
+				<td class="small">
 					<div><i class="fa {{ $user->hasElement($element) ? 'fa-check-circle-o' : 'fa-circle-o' }}" aria-hidden="true"></i></div>
 				</td>
 				@endforeach
 				
-				<td id="henx_{{ $user->id }}">{{ $user->countHenx() }}</td>
-				<td id="henx_{{ $user->id }}">{{ $user->draak ? $user->draak->format('H:m:i') : '' }}</td>
+				<td class="right" id="henx_{{ $user->id }}">{{ $user->countHenx() }}</td>
+				<td class="right" id="henx_{{ $user->id }}">{{ $user->draak ? $user->draak->format('H:m') : '' }}</td>
 			</tr>
 			@endforeach
 		</tbody>

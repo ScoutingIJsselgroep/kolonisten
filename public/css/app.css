@@ -74,13 +74,14 @@ th.rotate {
 th.rotate > div {
 	transform: 
 	  /* Magic Numbers */
-	  translate(-8px, 37px)
+	  translate(0px, 37px)
 	  /* 45 is really 360 - 45 */
 	  rotate(270deg);
-	width: 30px;
+	width: 22px;
 }
 th.rotate > div > span {
 	padding: 0 10px;
+	font-weight: normal;
 }
 
 .background {
@@ -336,4 +337,13 @@ form.full table input {
 
 table.teamscore tr.self {
 	background: #fff;
+}
+table.teamscore th.small,
+table.teamscore td.small {
+	width: 16px;
+	padding: 0;
+}
+table.teamscore td.small {
+    text-align: center;
+	vertical-align: middle;
 }

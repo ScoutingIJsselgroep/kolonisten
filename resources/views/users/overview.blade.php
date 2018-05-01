@@ -123,7 +123,7 @@ function initMap() {
 			} else if(l.step === 0) {
 				$.alert({
 					theme: 'supervan',
-					title: elements[l.element] + ' kopen op deze locatie?',
+					title: elements[l.element] + ' kopen?',
 					content: 'Het kost: ' + costs[l.element] + ' Henx' +
 							(costs[l.element] <= henx ? '' : '<div>Op dit moment heb je niet genoeg Henx, Je hebt er nu ' + henx + ' in de spaarpot. Vind meer locaties, en verdien zo extra Henx!</div>'),
 					buttons: (costs[l.element] <= henx ? {
@@ -138,7 +138,7 @@ function initMap() {
 			} else {
 				$.alert({
 					theme: 'supervan',
-					title: 'Vind eerst de code op deze locatie',
+					title: 'Vind eerst de code van deze locatie',
 					content: 'Heb je hem gevonden, en gescand, dan krijg je er meteen 2 Henx bij, en je kunt zien wat je hier kan kopen.',
 					buttons: {
 						'Okay, we gaan al zoeken': stopAnimations
