@@ -33,13 +33,13 @@ function initMap() {
 	var bounds = new google.maps.LatLngBounds();
 	@foreach($locations as $location)
 		@php
-			if($location->cafe) {
+			if($location->sustainable) {
 				$step = 4;
-			} else if($location->bb) {
+			} else if($location->gasenergy) {
 				$step = 3;
-			} else if($location->house) {
+			} else if($location->coalenergy) {
 				$step = 2;
-			} else if($location->flag) {
+			} else if($location->fire) {
 				$step = 1;
 			} else {
 				$step = 0;
@@ -62,5 +62,5 @@ function initMap() {
 	@endforeach
 }
 </script>
-<script async defr src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzr4rodwk_VNux23rZeTtjhnu4RBwlYtM&callback=initMap"></script>
+<script async defr src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-N0QabvmkBev7w-YovJw2-C96NsNh5VQ&callback=initMap"></script>
 @endsection

@@ -6,8 +6,8 @@
 <div class="content">
 <div class="background">
 <h1>Speluitleg</h1>
-<p>4 teams proberen Gorssel te koloniseren door het beginnen van 2 cafe&#39;s!</p>
-<p>Om een cafe te kunnen beginnen moet je eerst een locatie vinden, en je hebt grondstroffen nodig om te bouwen.<br />
+<p>4 teams proberen Gorssel te koloniseren door het beginnen van 2 sustainable&#39;s!</p>
+<p>Om een sustainable te kunnen beginnen moet je eerst een locatie vinden, en je hebt grondstroffen nodig om te bouwen.<br />
 	Wanneer je een locatie hebt gevonden ontvang je twee grondstoffen die bij die locatie horen.</p>
 <ol>
 	<li>Als je vervolgens voor 1 hout een vlag plaatst onvang je elke 3 minuten een nieuwe grondstof van die locatie.</li>

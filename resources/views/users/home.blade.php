@@ -3,14 +3,16 @@
 @section('content')
 <div class="content">
 	<div class="home">
-		<h1>Project 2C</h1>
+		<h1>Liander the game</h1>
 
-		<p>Welkom bij Project 2C.</p>
-		<p>Op 3 maart 2018 zullen we dit spel met de stam van scouting IJsselgroep gaan spelen.</p>
+		<p>30 Augustus komt Liander Aannemerij op bezoek in Gorssel.</p>
+		<p>Wat onder andere op het programma staat is dit interactive spel.</p>
 		<p>Bereid je voor:<br />
 			<a href="https://play.google.com/store/apps/details?id=com.google.zxing.client.android" target="_blank">Download alvast een QR code scanner</a>.</p>
-		<p>Scan de QR code om je groep mee aan te melden, en doe mee!</p>
-		<h2>Jasper &amp; Dennis</h2>
+		<p>Scan ter plaatse de QR code om je groep mee aan te melden, en doe mee!</p>
+		<h2>Tot dan bij,<br />Scouting IJsselgroep</h2>
+		
+		<img src="{{ url('img/cone.png') }}" alt="">
 
 		<div class="elements clearfix">
 		@foreach(\App\Models\Location::getElements() as $element => $name)

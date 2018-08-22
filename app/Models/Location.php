@@ -31,11 +31,11 @@ class Location extends Model {
 	public static function getElements() {
 		return [
 			'wood' => 'Hout',
-			'stone' => 'Steen',
-			'copper' => 'Koper',
-			'corn' => 'Graan',
-			'hop' => 'Hop',
-			'yeast' => 'Gist'
+			'coal' => 'Steenkool',
+			'fe' => 'IJzer',
+			'al' => 'Aluminium',
+			'ch4' => 'Gas',
+			'si' => 'Silicium'
 		];
 	}
 	

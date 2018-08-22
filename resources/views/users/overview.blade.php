@@ -9,7 +9,6 @@
 </svg>
 
 <a id="info" href="info"><i class="fa fa-question" aria-hidden="true"></i></a>
-<a id="team" href="team"><i class="fa fa-user" aria-hidden="true"></i></a>
 <a id="teams" href="teams"><i class="fa fa-users" aria-hidden="true"></i></a>
 
 <div class="elements clearfix">
@@ -47,13 +46,13 @@ function initMap() {
 	
 	@foreach($locations as $location)
 		@php
-			if($location->cafe) {
+			if($location->sustainable) {
 				$step = 4;
-			} else if($location->bb) {
+			} else if($location->gasenergy) {
 				$step = 3;
-			} else if($location->house) {
+			} else if($location->coalenergy) {
 				$step = 2;
-			} else if($location->flag) {
+			} else if($location->fire) {
 				$step = 1;
 			} else if($location->scan) {
 				$step = 0;
@@ -121,11 +120,11 @@ function initMap() {
 					theme: 'supervan',
 					title: 'Caf&eacute; erbij op deze locatie?',
 					content: 'Met een caf&eacute; krijg je elke halve minuut een extra ' + elements[l.element] + ' erbij.' + 
-							'<div>Het uitbouwen kost:</div><div class="costs">' + costList('cafe') + '</div>' +
-							(costCheck('cafe') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('cafe') ? {
+							'<div>Het uitbouwen kost:</div><div class="costs">' + costList('sustainable') + '</div>' +
+							(costCheck('sustainable') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
+					buttons: (costCheck('sustainable') ? {
 						'Ja, lijkt me super': function(){
-							location.href = '/users/build/' + l.id + '/cafe';
+							location.href = '/users/build/' + l.id + '/sustainable';
 						},
 						'Nu nog niet': stopAnimations
 					} : {
@@ -137,11 +136,11 @@ function initMap() {
 					theme: 'supervan',
 					title: 'Bed en breakfast erbij op deze locatie?',
 					content: 'Met een bed en breakfast krijg je elke minuut een extra ' + elements[l.element] + ' erbij.' + 
-							'<div>Het verbouwen kost:</div><div class="costs">' + costList('bb') + '</div>' +
-							(costCheck('bb') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('bb') ? {
+							'<div>Het verbouwen kost:</div><div class="costs">' + costList('gasenergy') + '</div>' +
+							(costCheck('gasenergy') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
+					buttons: (costCheck('gasenergy') ? {
 						'Ja, bouw maar uit': function(){
-							location.href = '/users/build/' + l.id + '/bb';
+							location.href = '/users/build/' + l.id + '/gasenergy';
 						},
 						'Nu nog niet': stopAnimations
 					} : {
@@ -153,11 +152,11 @@ function initMap() {
 					theme: 'supervan',
 					title: 'Huis plaatsen op deze locatie?',
 					content: 'Met een huis krijg je elke 2 minuten een extra ' + elements[l.element] + ' erbij.' + 
-							'<div>Het bouwen kost:</div><div class="costs">' + costList('house') + '</div>' +
-							(costCheck('house') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('house') ? {
+							'<div>Het bouwen kost:</div><div class="costs">' + costList('coalenergy') + '</div>' +
+							(costCheck('coalenergy') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
+					buttons: (costCheck('coalenergy') ? {
 						'Ja, hier wil ik een huis': function(){
-							location.href = '/users/build/' + l.id + '/house';
+							location.href = '/users/build/' + l.id + '/coalenergy';
 						},
 						'Nu nog niet': stopAnimations
 					} : {
@@ -169,11 +168,11 @@ function initMap() {
 					theme: 'supervan',
 					title: 'Vlag plaatsen op deze locatie?',
 					content: 'Met een vlag krijg je elke 3 minuten een ' + elements[l.element] + ' erbij.' + 
-							'<div>Het plaatsen kost:</div><div class="costs">' + costList('flag') + '</div>' +
-							(costCheck('flag') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('flag') ? {
+							'<div>Het plaatsen kost:</div><div class="costs">' + costList('fire') + '</div>' +
+							(costCheck('fire') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
+					buttons: (costCheck('fire') ? {
 						'Ja, planten dat ding': function(){
-							location.href = '/users/build/' + l.id + '/flag';
+							location.href = '/users/build/' + l.id + '/fire';
 						},
 						'Nu nog niet': stopAnimations
 					} : {
@@ -193,13 +192,47 @@ function initMap() {
         });
 	});
 	
+	var me = false;
+	function showPosition(position) {
+		me = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		new google.maps.Marker({
+			position: me,
+			map: map,
+			icon: {
+				url: '{{ url('img/me.png') }}',
+				size: new google.maps.Size(20, 20),
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(10, 10)
+			}
+		});
+		var bounds = new google.maps.LatLngBounds();
+		bounds.extend(me);
+		$.each(locations, function() {
+			posistion = new google.maps.LatLng(this.lat, this.lng);
+			bounds.extend(posistion);
+		});
+		map.fitBounds(bounds);
+	}
+	
+	if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert('Kan helaas je locatie niet bepalen');
+    }
+	
 	function update() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition);
+		}
 		$.getJSON(location.href, function(data) {
 			stopAnimations();
 			if(data.winner) {
 				location.href = '/team'
 			}
 			var bounds = new google.maps.LatLngBounds();
+			if(me) {
+				bounds.extend(me);
+			}
 			$.each(data.locations, function() {
 				var newLocationData = this,
 					found = false,
@@ -251,7 +284,7 @@ function initMap() {
 	  , border = document.getElementById('border')
 	  , α = 360
 	  , π = Math.PI
-	  , t = 30/360*1000;
+	  , t = 60/360*1000;
 
 	(function draw() {
 		α--;
@@ -285,5 +318,5 @@ function initMap() {
 	});
 }
 </script>
-<script async defr src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzr4rodwk_VNux23rZeTtjhnu4RBwlYtM&callback=initMap"></script>
+<script async defr src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-N0QabvmkBev7w-YovJw2-C96NsNh5VQ&callback=initMap"></script>
 @endsection

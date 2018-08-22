@@ -16,21 +16,21 @@
 	@endif
 @endif
 
-@if($user->countBbs())
+@if($user->countGasenergys())
 <p class="floating-img clearfix"><img src="img/medal.png">Ga naar De Hoek om een om te kijken hoe je van je B&amp;B straks een caf&eacute; moet maken.</p>
 @endif
 
-@if($user->countHouses())
+@if($user->countCoalenergys())
 <p class="floating-img clearfix"><img src="img/gift.png">Ga naar Gusto om een versnapering op te halen ter ere van je eerste huis.</p>
 @endif
 
-<p>Onder in beeld zie je steeds je voorraad grondstoffen, daarnaast hebben jullie onderstaande al bereikt.</p>
+<p>Onder in beeld zie je steeds je voorraad grondstoffen, daarnaast heeft jullie team al de volgende energiebronnen.</p>
 <ul>
 	<li>{{ $user->countScans()==1?'1 locatie gevonden':$user->countScans() . ' locaties gevonden' }}</li>
-	<li>{{ $user->countFlags()==1?'1 vlag geplaatst':$user->countFlags() . ' vlaggen geplaatst' }}</li>
-	<li>{{ $user->countHouses()==1?'1 huis gebouwd':$user->countHouses() . ' huizen gebouwd' }}</li>
-	<li>{{ $user->countBbs()==1?'1 bed en breakfast gemaakt':$user->countBbs() . ' bed en breakfasts gemaakt' }}</li>
-	<li>{{ $user->countCafes()==1?'1 cafe geopend':$user->countCafes() . ' cafe\'s geopend' }}</li>
+	<li>{{ $user->countFires()==1?'1 vuur ontstoken':$user->countFires() . ' vuren ontstoken' }}</li>
+	<li>{{ $user->countCoalenergys()==1?'1 kolencentrale aangesloten':$user->countCoalenergys() . ' kolencentrales aangesloten' }}</li>
+	<li>{{ $user->countGasenergys()==1?'1 gascentrale aangesloten':$user->countGasenergys() . ' gascentrales aangesloten' }}</li>
+	<li>{{ $user->countSustainables()==1?'1 duurzame energiebron aangesloten':$user->countSustainables() . ' duurzame energiebronnen aangesloten' }}</li>
 </ul>
 </div>
 </div>

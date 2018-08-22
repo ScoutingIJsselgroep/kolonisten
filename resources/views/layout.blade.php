@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<base href="{{ url('/') }}">
 		
-        <title>Project 2C | Scouting IJsselgroep</title>
+        <title>Liander the game | 30 augustus</title>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css" integrity="sha384-BGv6NDAkuWxBoOcrFAufJ34dwDag61ithadL8KVUIL6w+qJaIOxImfBJpSG7LbtM" crossorigin="anonymous">
         <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -23,7 +23,7 @@
 		</div>
 		@endif
         @yield('content')
-		<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js" integrity="sha384-c5+Ne1Ji5HwOtH6KSZMGFax7KcQo2mQsaHZBhEPPgyI+Ems8R0fBlJ0YC4dOAiJ5" crossorigin="anonymous"></script>
 		<script src="js/settings.js"></script>
 		<script>

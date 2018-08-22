@@ -42,10 +42,10 @@
 				@endforeach
 				
 				<td class="right">{{ $user->countScans() }}</td>
-				<td class="right">{{ $user->countFlags() }}</td>
-				<td class="right">{{ $user->countHouses() }}</td>
-				<td class="right">{{ $user->countBbs() }}</td>
-				<td class="right">{{ $user->countCafes() }}</td>
+				<td class="right">{{ $user->countFires() }}</td>
+				<td class="right">{{ $user->countCoalenergys() }}</td>
+				<td class="right">{{ $user->countGasenergys() }}</td>
+				<td class="right">{{ $user->countSustainables() }}</td>
 			</tr>
 			@endforeach
 		</tbody>

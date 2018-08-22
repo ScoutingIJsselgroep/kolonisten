@@ -25,43 +25,43 @@ class UserLocation extends Model {
      */
     protected $dates = [
 		'scan',
-		'flag',
-		'house',
-		'bb',
-		'cafe'
+		'fire',
+		'coalenergy',
+		'gasenergy',
+		'sustainable'
 	];
     public static $costs = [
-		'flag' => [
+		'fire' => [
 			'wood' => 1,
-			'stone' => 0,
-			'copper' => 0,
-			'corn' => 0,
-			'hop' => 0,
-			'yeast' => 0
+			'coal' => 0,
+			'fe' => 0,
+			'al' => 0,
+			'ch4' => 0,
+			'si' => 0
 		],
-		'house' => [
+		'coalenergy' => [
 			'wood' => 6,
-			'stone' => 8,
-			'copper' => 2,
-			'corn' => 0,
-			'hop' => 0,
-			'yeast' => 0
+			'coal' => 8,
+			'fe' => 2,
+			'al' => 0,
+			'ch4' => 0,
+			'si' => 0
 		],
-		'bb' => [
+		'gasenergy' => [
 			'wood' => 4,
-			'stone' => 6,
-			'copper' => 3,
-			'corn' => 3,
-			'hop' => 0,
-			'yeast' => 0
+			'coal' => 6,
+			'fe' => 3,
+			'al' => 3,
+			'ch4' => 0,
+			'si' => 0
 		],
-		'cafe' => [
+		'sustainable' => [
 			'wood' => 2,
-			'stone' => 6,
-			'copper' => 8,
-			'corn' => 5,
-			'hop' => 5,
-			'yeast' => 5
+			'coal' => 6,
+			'fe' => 8,
+			'al' => 5,
+			'ch4' => 5,
+			'si' => 5
 		]
 	];
 	public function user() {

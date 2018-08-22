@@ -131,10 +131,10 @@ class LocationsController extends Controller
 			'user' => $user,
 			'locations' => Location::leftJoin('user_locations', function($join) {
 				$join->on('user_locations.location_id', '=', 'locations.id')
-						->whereNotNull('user_locations.house');
+						->whereNotNull('user_locations.coalenergy');
 			})->leftJoin('users', function($join) {
 				$join->on('user_locations.user_id', '=', 'users.id');
-			})->where('locations.available', '<', Carbon::now()->format('H:i:s'))->select('locations.*', 'users.name', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->get()
+			})->where('locations.available', '<', Carbon::now()->format('H:i:s'))->select('locations.*', 'users.name', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable')->get()
 		]);
 	}
 }

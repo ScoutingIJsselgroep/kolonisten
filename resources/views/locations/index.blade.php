@@ -146,5 +146,5 @@ function initMap() {
 	map.fitBounds(bounds);
 }
 </script>
-<script async defr src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzr4rodwk_VNux23rZeTtjhnu4RBwlYtM&callback=initMap"></script>
+<script async defr src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-N0QabvmkBev7w-YovJw2-C96NsNh5VQ&callback=initMap"></script>
 @endsection

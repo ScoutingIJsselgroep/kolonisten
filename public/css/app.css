@@ -10,14 +10,14 @@ body {
 	-webkit-text-size-adjust: 100%;
 	margin: 0;
 	padding: 0;
-	font-family: "Times New Roman", Times, serif;
+	font-family: Verdana,Arial,sans-serif;
 	position: relative;
 	height: 100%;
 }
 
 html {
 	min-height: 100%;
-	background: url(../img/sunset.jpg) center center / cover no-repeat fixed #cc3333;
+	background: url(../img/liander-kaart-white.png) center center / contain no-repeat fixed #fff;
 }
 body {
 }
@@ -29,18 +29,19 @@ body {
 }
 
 h1, h2, h3 {
-	font-family: 'Tangerine', serif;
-	text-shadow: 4px 4px 4px #aaa;
+	font-family: "Proxima Nova Light",Verdana,Arial,sans-serif;
+	text-shadow: 0 0 4px #fff;
 	font-weight: normal;
+	color: #821e7d;
 }
 
 h1 {
-	font-size: 45px;
+	font-size: 25px;
 }
 
 a {
-	color: #EBE3CD;
-	text-shadow: 0px 0px 2px #000;
+	color: #525151;
+	text-shadow: 0px 0px 2px #fff;
 }
 a:hover,
 a:focus {
@@ -65,6 +66,25 @@ table th.right,
 table td.right {
 	text-align: right;
 }
+
+th.rotate {
+	/* Something you can count on */
+	height: 60px;
+	white-space: nowrap;
+}
+th.rotate > div {
+	transform: 
+	  /* Magic Numbers */
+	  translate(0px, 37px)
+	  /* 45 is really 360 - 45 */
+	  rotate(270deg);
+	width: 22px;
+}
+th.rotate > div > span {
+	padding: 0 10px;
+	font-weight: normal;
+}
+
 .background {
 	background: rgba(255, 255, 255, 0.5);
 	box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.5);
@@ -84,6 +104,8 @@ table td.right {
 .content .home {
 	text-align: center;
 	padding-bottom: 60px;
+	color: #525151;
+	text-shadow: 0px 0px 2px #fff;
 }
 #refresh {
 	position: fixed;
@@ -94,7 +116,6 @@ table td.right {
 #refresh #border { fill: #8F7C74 }
 
 #teams,
-#team,
 #info {
 	position: fixed;
 	top: 5px;
@@ -110,11 +131,8 @@ table td.right {
 	padding: 4px;
 	text-shadow: none;
 }
-#team {
-	top: 50px;
-}
 #teams {
-	top: 95px;
+	top: 50px;
 }
 td.progress {
 	height: 22px;
@@ -148,10 +166,10 @@ td.progress img {
 	left: 0;
 	right: 0;
 	padding: 5px;
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#dfd2ae+0,dfd2ae+100&0+0,1+100 */
-	background: -moz-linear-gradient(top, rgba(223,210,174,0) 0%, rgba(223,210,174,1) 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top, rgba(223,210,174,0) 0%,rgba(223,210,174,1) 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom, rgba(223,210,174,0) 0%,rgba(223,210,174,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#008bbd+58,821e7d+100&0+0,1+100 */
+	background: -moz-linear-gradient(top, rgba(0,139,189,0) 0%, rgba(0,139,189,0.58) 58%, rgba(130,30,125,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(0,139,189,0) 0%,rgba(0,139,189,0.58) 58%,rgba(130,30,125,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(0,139,189,0) 0%,rgba(0,139,189,0.58) 58%,rgba(130,30,125,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .elements .element,
 .teams .team {
@@ -278,4 +296,17 @@ form.full table input {
 	float: left;
 	max-width: 100%;
 	margin-right: 10px;
+}
+
+table.teamscore tr.self {
+	background: #fff;
+}
+table.teamscore th.small,
+table.teamscore td.small {
+	width: 16px;
+	padding: 0;
+}
+table.teamscore td.small {
+    text-align: center;
+	vertical-align: middle;
 }

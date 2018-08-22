@@ -31,7 +31,7 @@ class UsersController extends Controller
 					$join->on('user_locations.location_id', '=', 'locations.id')
 							->where('user_locations.user_id', '=', $user->id);
 				})->where('locations.available', '<', Carbon::now()->format('H:i:s'))
-				->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->get()
+				->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable')->get()
 			]);
 		} else if(Carbon::now()->lt(Carbon::create(2018, 3, 3, 19, 30, 0))) {
 			return view('users.countdown');
@@ -67,14 +67,14 @@ class UsersController extends Controller
 				$join->on('user_locations.location_id', '=', 'locations.id')
 						->where('user_locations.user_id', '=', $user->id);
 			})->where('locations.available', '<', Carbon::now()->format('H:i:s'))
-			->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->get() as $location) {
-			if($location->cafe) {
+			->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable')->get() as $location) {
+			if($location->sustainable) {
 				$step = 4;
-			} else if($location->bb) {
+			} else if($location->gasenergy) {
 				$step = 3;
-			} else if($location->house) {
+			} else if($location->coalenergy) {
 				$step = 2;
-			} else if($location->flag) {
+			} else if($location->fire) {
 				$step = 1;
 			} else if($location->scan) {
 				$step = 0;
@@ -163,9 +163,9 @@ class UsersController extends Controller
 					'error' => 'Helaas',
 					'message' => 'Deze plek moet je nog ontdekken' 
 				]);
-			} else if($type == 'flag') {
-				if(!$userLocation->flag) {
-					$userLocation->flag = Carbon::now();
+			} else if($type == 'fire') {
+				if(!$userLocation->fire) {
+					$userLocation->fire = Carbon::now();
 					$userLocation->save();
 					
 					return redirect()->to('/')->with([
@@ -176,23 +176,23 @@ class UsersController extends Controller
 			} else {
 				$otherUserLocation = UserLocation::where('user_id', '<>', $request->session()->get('user'))
 					->where('location_id', '=', $location->id)
-					->whereNotNull('house')->first();
+					->whereNotNull('coalenergy')->first();
 				if($otherUserLocation) {
 					return redirect()->to('/')->with([
 						'error' => 'Helaas',
 						'message' => 'Team ' . $otherUserLocation->user->name . ' heeft hier al gebouwd' 
 					]);
-				} else if($type == 'house') {
-					if(!$userLocation->flag) {
+				} else if($type == 'coalenergy') {
+					if(!$userLocation->fire) {
 						return redirect()->to('/')->with([
 							'error' => 'Helaas',
 							'message' => 'Je moet hier eerst een vlag plaatsen' 
 						]);
-					} else if(!$userLocation->house) {
-						$userLocation->house = Carbon::now();
+					} else if(!$userLocation->coalenergy) {
+						$userLocation->coalenergy = Carbon::now();
 						$userLocation->save();
 						
-						if($user->countHouses()==1) {
+						if($user->countCoalenergys()==1) {
 							return redirect()->to('/team')->with([
 								'title' => 'Gefeliciteerd!',
 								'message' => 'Je eerste huis, je kunt een cadeau ophalen, kijk bij de teampagina, voor meer info. Je ontvangt nu iedere 2 minuten een extra ' . $location->elementName()
@@ -204,19 +204,19 @@ class UsersController extends Controller
 							]);
 						}
 					}
-				} else if($type == 'bb') {
-					if(!$userLocation->house) {
+				} else if($type == 'gasenergy') {
+					if(!$userLocation->coalenergy) {
 						return redirect()->to('/')->with([
 							'error' => 'Helaas',
 							'message' => 'Je moet hier eerst een huis bouwen' 
 						]);
-					} else if(!$userLocation->bb) {
-						$userLocation->bb = Carbon::now();
+					} else if(!$userLocation->gasenergy) {
+						$userLocation->gasenergy = Carbon::now();
 						$userLocation->save();
 						
 						// is het de eerste dan excursie bij de hoek
 						
-						if($user->countBbs()==1) {
+						if($user->countGasenergys()==1) {
 							return redirect()->to('/team')->with([
 								'title' => 'Gefeliciteerd!',
 								'message' => 'Je eerste bed en breakfast, je kunt een cadeau ophalen, kijk bij de teampagina, voor meer info. Je ontvangt nu iedere minuut een extra ' . $location->elementName()
@@ -228,17 +228,17 @@ class UsersController extends Controller
 							]);
 						}
 					}
-				} else if($type == 'cafe') {
-					if(!$userLocation->bb) {
+				} else if($type == 'sustainable') {
+					if(!$userLocation->gasenergy) {
 						return redirect()->to('/')->with([
 							'error' => 'Helaas',
 							'message' => 'Je moet hier eerst een B&ampB bouwen' 
 						]);
-					} else if(!$userLocation->cafe) {
-						$userLocation->cafe = Carbon::now();
+					} else if(!$userLocation->sustainable) {
+						$userLocation->sustainable = Carbon::now();
 						$userLocation->save();
 						
-						if($user->countCafes()==2) {
+						if($user->countSustainables()==2) {
 							if($user->id == User::getWinner()) {
 								return redirect()->to('/team')->with([
 									'title' => 'Hulde!',
@@ -270,9 +270,9 @@ class UsersController extends Controller
 		if($team) {
 			$userLocation = UserLocation::leftJoin('users', function($join) {
 					$join->on('user_locations.user_id', '=', 'users.id');
-				})->whereNotNull('user_locations.house')
+				})->whereNotNull('user_locations.coalenergy')
 					->where('location_id', '=', $location->id)
-					->select('users.name', 'user_locations.scan', 'user_locations.flag', 'user_locations.house', 'user_locations.bb', 'user_locations.cafe')->first();
+					->select('users.name', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable')->first();
 			if($userLocation && $step !== null) {
 				// al gescand
 				$element = imagecreatefrompng(public_path('img/' . strtolower($userLocation->name) . '.png'));
@@ -281,15 +281,15 @@ class UsersController extends Controller
 				imagesavealpha($img, true);
 				
 				// al iets gebouwd
-				if($userLocation->cafe) {
+				if($userLocation->sustainable) {
 					$p = imagecreatefrompng(public_path('img/p' . 4 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
-				} else if($userLocation->bb) {
+				} else if($userLocation->gasenergy) {
 					$p = imagecreatefrompng(public_path('img/p' . 3 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
-				} else if($userLocation->house) {
+				} else if($userLocation->coalenergy) {
 					$p = imagecreatefrompng(public_path('img/p' . 2 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
@@ -307,19 +307,19 @@ class UsersController extends Controller
 				imagesavealpha($img, true);
 				
 				// al iets gebouwd
-				if($userLocation->cafe) {
+				if($userLocation->sustainable) {
 					$p = imagecreatefrompng(public_path('img/p' . 4 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
-				} else if($userLocation->bb) {
+				} else if($userLocation->gasenergy) {
 					$p = imagecreatefrompng(public_path('img/p' . 3 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
-				} else if($userLocation->house) {
+				} else if($userLocation->coalenergy) {
 					$p = imagecreatefrompng(public_path('img/p' . 2 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
-				} else if($userLocation->flag) {
+				} else if($userLocation->fire) {
 					$p = imagecreatefrompng(public_path('img/p' . 1 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
