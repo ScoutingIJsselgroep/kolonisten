@@ -127,4 +127,20 @@ class User extends Model
 		return $count;
 	}
 	
+	public function availableLocations() {
+		$next_locations = $locations = array_merge([$this->start_location_id], $this->userLocations()->orderBy('scan')->pluck('location_id')->toArray());
+		foreach($locations as $location_id) {
+			$location = Location::find($location_id);
+			
+			$next_locations = array_merge($next_locations, Location::whereNotIn('locations.id', $next_locations)->orderByRaw('
+				ASIN(SQRT(
+				POWER(SIN((locations.lat - abs(' . $location->lat . ')) * pi()/180 / 2),
+				2) + COS(locations.lat * pi()/180 ) * COS(abs(' . $location->lat . ') *
+				pi()/180) * POWER(SIN((locations.lng - ' . $location->lng . ') *
+				pi()/180 / 2), 2) ))
+			')->take(2)->pluck('id')->toArray());
+		}
+		
+		return array_unique($next_locations);
+	}
 }

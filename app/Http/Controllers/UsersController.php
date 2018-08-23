@@ -30,7 +30,7 @@ class UsersController extends Controller
 				'locations' => Location::leftJoin('user_locations', function($join) use ($user) {
 					$join->on('user_locations.location_id', '=', 'locations.id')
 							->where('user_locations.user_id', '=', $user->id);
-				})->where('locations.available', '<', Carbon::now()->format('H:i:s'))
+				})->whereIn('locations.id', $user->availableLocations())
 				->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable')->get()
 			]);
 		} else {
@@ -100,7 +100,7 @@ class UsersController extends Controller
 		foreach(Location::leftJoin('user_locations', function($join) use ($user) {
 				$join->on('user_locations.location_id', '=', 'locations.id')
 						->where('user_locations.user_id', '=', $user->id);
-			})->where('locations.available', '<', Carbon::now()->format('H:i:s'))
+			})->whereIn('locations.id', $user->availableLocations())
 			->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable')->get() as $location) {
 			if($location->sustainable) {
 				$step = 4;
@@ -224,8 +224,8 @@ class UsersController extends Controller
 						]);
 					} else if(!$userLocation->coalenergy) {
 						$userLocation->coalenergy = Carbon::now();
-						$userLocation->save();
-						
+					$userLocation->save();
+					
 						if($user->countCoalenergys()==1) {
 							return redirect()->to('/team')->with([
 								'title' => 'Gefeliciteerd!',
@@ -247,7 +247,7 @@ class UsersController extends Controller
 					} else if(!$userLocation->gasenergy) {
 						$userLocation->gasenergy = Carbon::now();
 						$userLocation->save();
-						
+					
 						// is het de eerste dan excursie bij de hoek
 						
 						if($user->countGasenergys()==1) {
@@ -285,7 +285,7 @@ class UsersController extends Controller
 								]);
 							}
 						}
-						
+		
 						return redirect()->to('/')->with([
 							'title' => 'Gefeliciteerd!',
 							'message' => 'Je ontvangt nu iedere halve minuut een extra ' . $location->elementName()
@@ -314,6 +314,7 @@ class UsersController extends Controller
 				imagedestroy($element);
 				imagesavealpha($img, true);
 				
+				/*
 				// al iets gebouwd
 				if($userLocation->sustainable) {
 					$p = imagecreatefrompng(public_path('img/p' . 4 . '.png'));
@@ -327,7 +328,7 @@ class UsersController extends Controller
 					$p = imagecreatefrompng(public_path('img/p' . 2 . '.png'));
 					imagecopyresampled($img, $p, 0, 0, 0, 0, 40, 40, 40, 40);
 					imagedestroy($p);
-				}
+				}*/
 			}
 			
 		} else if($request->session()->has('user')) {
@@ -371,8 +372,30 @@ class UsersController extends Controller
 		// $request;
 		
 		return view('users.index', [
-			'users' => User::all()
+			'users' => User::leftJoin('user_locations', function($join) {
+					$join->on('user_locations.user_id', '=', 'users.id');
+				})
+				->select(
+					'users.*',
+					\DB::raw('count(user_locations.sustainable) as sustainable'),
+					\DB::raw('count(user_locations.gasenergy) as gasenergy'),
+					\DB::raw('count(user_locations.coalenergy) as coalenergy'),
+					\DB::raw('count(user_locations.fire) as fire')
+				)
+				->orderByRaw('count(user_locations.sustainable) desc')
+				->orderByRaw('count(user_locations.gasenergy) desc')
+				->orderByRaw('count(user_locations.coalenergy) desc')
+				->orderByRaw('count(user_locations.fire) desc')
+				->orderByRaw('count(user_locations.id) desc')
+				->groupBy('users.id')->get()
 		]);
+	}
+	
+	public function add(Request $request) {
+		$user = new User;
+		$user->name = $request->name;
+		
+		return redirect()->back();
 	}
 	
 	public function unlock(Request $request, User $user) {
