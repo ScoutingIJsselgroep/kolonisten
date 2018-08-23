@@ -15,10 +15,10 @@
 				@endforeach
 				
 				<th class="right">Scans</th>
-				<th class="right">Vlaggen</th>
-				<th class="right">Huizen</th>
-				<th class="right">B&amp;B&#39;s</th>
-				<th class="right">Cafe&#39;s</th>
+				<th class="right">Vuren</th>
+				<th class="right">Kolencentrales</th>
+				<th class="right">Gascentrales</th>
+				<th class="right">Duurzame bronnen</th>
 			</tr>
 		</thead>
 		<tbody>

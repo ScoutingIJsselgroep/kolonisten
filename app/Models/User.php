@@ -18,6 +18,12 @@ class User extends Model
         'name'
     ];
 	
+    public static $targets = [
+		'fire' => 'Vuur',
+		'coalenergy' => 'Kolencentrale',
+		'gasenergy' => 'Gascentrale',
+		'sustainable' => 'Duurzaam'
+	];
 	
 	public static function getWinner() {
 		$found = [];
@@ -66,16 +72,16 @@ class User extends Model
 					$elements[$element] += 2;
 				}
 				if($location->fire) {
-					$elements[$element] += floor($location->fire->diffInMinutes(Carbon::now()) / 3);
+					$elements[$element] += round(tanh($location->fire->diffInMinutes(Carbon::now()) * pi() / 20) * 3);
 				}
 				if($location->coalenergy) {
-					$elements[$element] += floor($location->coalenergy->diffInMinutes(Carbon::now()) / 2);
+					$elements[$element] += round(tanh($location->coalenergy->diffInMinutes(Carbon::now()) * pi() / 15) * 6);
 				}
 				if($location->gasenergy) {
-					$elements[$element] += $location->coalenergy->diffInMinutes(Carbon::now());
+					$elements[$element] += round(tanh($location->gasenergy->diffInMinutes(Carbon::now()) * pi() / 10) * 8);
 				}
 				if($location->sustainable) {
-					$elements[$element] += floor($location->coalenergy->diffInSeconds(Carbon::now()) / 30);
+					$elements[$element] += round(tanh($location->sustainable->diffInMinutes(Carbon::now()) * pi() / 5) * 10);
 				}
 			}
 			
@@ -88,6 +94,7 @@ class User extends Model
 		return $elements;
 	}
 	public function countElement($element) {
+		
 		$count = $this->{$element};
 		foreach($this->userLocations()->join('locations', function($join) use ($element) {
 			$join->on('user_locations.location_id', '=', 'locations.id')->where('element', '=', $element);
@@ -96,16 +103,16 @@ class User extends Model
 				$count += 2;
 			}
 			if($location->fire) {
-				$count += floor($location->fire->diffInMinutes(Carbon::now()) / 3);
+				$count += round(tanh($location->fire->diffInMinutes(Carbon::now()) * pi() / 20) * 3);
 			}
 			if($location->coalenergy) {
-				$count += floor($location->coalenergy->diffInMinutes(Carbon::now()) / 2);
+				$count += round(tanh($location->coalenergy->diffInMinutes(Carbon::now()) * pi() / 15) * 6);
 			}
 			if($location->gasenergy) {
-				$count += $location->coalenergy->diffInMinutes(Carbon::now());
+				$count += round(tanh($location->gasenergy->diffInMinutes(Carbon::now()) * pi() / 10) * 8);
 			}
 			if($location->sustainable) {
-				$count += floor($location->coalenergy->diffInSeconds(Carbon::now()) / 30);
+				$count += round(tanh($location->sustainable->diffInMinutes(Carbon::now()) * pi() / 5) * 10);
 			}
 		}
 		

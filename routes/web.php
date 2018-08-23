@@ -2,7 +2,8 @@
 
 Route::any('/', 'UsersController@home');
 Route::any('/info', 'UsersController@info');
-Route::any('/teams', 'LocationsController@teams');
+// Route::any('/teams', 'LocationsController@teams');
+Route::any('/teams', 'UsersController@teams');
 Route::any('/team', 'UsersController@archived');
 
 Route::any('/u/{qr}', 'UsersController@qr');

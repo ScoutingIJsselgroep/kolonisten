@@ -230,6 +230,7 @@ function initMap() {
 				location.href = '/team'
 			}
 			var bounds = new google.maps.LatLngBounds();
+			bounds.extend(new google.maps.LatLng(52.19994815375433, 6.215185941339087));
 			if(me) {
 				bounds.extend(me);
 			}
@@ -318,5 +319,5 @@ function initMap() {
 	});
 }
 </script>
-<script async defr src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-N0QabvmkBev7w-YovJw2-C96NsNh5VQ&callback=initMap"></script>
+<script async defr src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1Ow7kTUabBE2su0Cq6TXJuYBLZLp1LTw&callback=initMap"></script>
 @endsection

@@ -35,34 +35,34 @@
 	</tr>
 	
 	<tr>
-		<td class="progress"><img src="img/p1.png"> Vlag</td>
+		<td class="progress"><img src="img/p1.png"> Vuur</td>
 		<td class="costs">&nbsp;</td>
 		<td class="costs">1</td>
 		<td class="costs">&nbsp;</td>
 		<td class="costs">&nbsp;</td>
 		<td class="costs">&nbsp;</td>
 		<td class="costs">&nbsp;</td>
-		<td class="right">3 min</td>
+		<td class="right">+3 in 20 min</td>
 	</tr>
 	<tr>
-		<td class="progress"><img src="img/p2.png"> Huis</td>
+		<td class="progress"><img src="img/p2.png"> Steenkool</td>
 		<td class="costs">8</td>
 		<td class="costs">6</td>
 		<td class="costs">2</td>
 		<td class="costs">&nbsp;</td>
 		<td class="costs">&nbsp;</td>
 		<td class="costs">&nbsp;</td>
-		<td class="right">2 min</td>
+		<td class="right">+6 in 15 min</td>
 	</tr>
 	<tr>
-		<td class="progress"><img src="img/p3.png"> B&amp;B</td>
+		<td class="progress"><img src="img/p3.png"> Gas</td>
 		<td class="costs">6</td>
 		<td class="costs">4</td>
 		<td class="costs">3</td>
 		<td class="costs">3</td>
 		<td class="costs">&nbsp;</td>
 		<td class="costs">&nbsp;</td>
-		<td class="right">1 min</td>
+		<td class="right">+8 in 10 min</td>
 	</tr>
 	<tr>
 		<td class="progress"><img src="img/p4.png"> Caf&eacute;</td>
@@ -72,7 +72,7 @@
 		<td class="costs">5</td>
 		<td class="costs">5</td>
 		<td class="costs">5</td>
-		<td class="right">30 sec</td>
+		<td class="right">+10 in 5 min</td>
 	</tr>
 </table>
 

@@ -33,10 +33,44 @@ class UsersController extends Controller
 				})->where('locations.available', '<', Carbon::now()->format('H:i:s'))
 				->select('locations.*', 'user_locations.user_id', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable')->get()
 			]);
-		} else if(Carbon::now()->lt(Carbon::create(2018, 3, 3, 19, 30, 0))) {
-			return view('users.countdown');
 		} else {
 			return view('users.home');
+		}
+	}
+	
+	public function teams(Request $request) {
+		if($request->session()->has('user')) {
+			$user = User::find($request->session()->get('user'));
+			if($user->lock !== $request->session()->get('user_lock')) {
+				$request->session()->flush();
+				return redirect()->to('/')->with([
+					'error' => 'Afgemeld',
+					'message' => 'Je bent afgemeld door de spelleiding' 
+				]);
+			}
+			
+			
+			return view('users.teams', [
+				'self' => $user,
+				'users' => User::leftJoin('user_locations', function($join) {
+					$join->on('user_locations.user_id', '=', 'users.id');
+				})
+				->select(
+					'users.*',
+					\DB::raw('count(user_locations.sustainable) as sustainable'),
+					\DB::raw('count(user_locations.gasenergy) as gasenergy'),
+					\DB::raw('count(user_locations.coalenergy) as coalenergy'),
+					\DB::raw('count(user_locations.fire) as fire')
+				)
+				->orderByRaw('count(user_locations.sustainable) desc')
+				->orderByRaw('count(user_locations.gasenergy) desc')
+				->orderByRaw('count(user_locations.coalenergy) desc')
+				->orderByRaw('count(user_locations.fire) desc')
+				->orderByRaw('count(user_locations.id) desc')
+				->groupBy('users.id')->get()
+			]);
+		} else {
+			return redirect()->to('/');
 		}
 	}
 	
