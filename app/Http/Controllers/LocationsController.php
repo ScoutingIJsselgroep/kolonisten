@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class LocationsController extends Controller
 {
 	public function qr(Request $request, $qr) {
-		$location = Location::where('code', '=', $qr)->where('locations.available', '<', Carbon::now()->format('H:i:s'))->first();
+		$location = Location::where('code', '=', $qr)->first();
 		if($location) {
 			if($request->has('confirm')) {
 				if($request->session()->has('user')) {
@@ -21,6 +21,13 @@ class LocationsController extends Controller
 						return redirect()->to('/')->with([
 							'error' => 'Afgemeld',
 							'message' => 'Je bent afgemeld door de spelleiding' 
+						]);
+					}
+					
+					if(!in_array($location->id, $user->availableLocations())) {
+						return redirect()->to('/')->with([
+							'error' => 'Locatie niet gevonden',
+							'message' => 'Misschien later in het spel' 
 						]);
 					}
 					
@@ -126,18 +133,18 @@ class LocationsController extends Controller
 			$user = User::find($request->session()->get('user'));
 			$locations = Location::leftJoin('user_locations', function($join) {
 					$join->on('user_locations.location_id', '=', 'locations.id')
-							->whereNotNull('user_locations.coalenergy');
+							->whereNotNull('user_locations.coalplant');
 				})->leftJoin('users', function($join) {
 					$join->on('user_locations.user_id', '=', 'users.id');
-				})->whereIn('locations.id', $user->availableLocations())->select('locations.*', 'users.name', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable');
+				})->whereIn('locations.id', $user->availableLocations())->select('locations.*', 'users.name', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalplant', 'user_locations.gasplant', 'user_locations.sustainable');
 		} else {
 			$user = false;
 			$locations = Location::leftJoin('user_locations', function($join) {
 				$join->on('user_locations.location_id', '=', 'locations.id')
-						->whereNotNull('user_locations.coalenergy');
+						->whereNotNull('user_locations.coalplant');
 			})->leftJoin('users', function($join) {
 				$join->on('user_locations.user_id', '=', 'users.id');
-			})->select('locations.*', 'users.name', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalenergy', 'user_locations.gasenergy', 'user_locations.sustainable');
+			})->select('locations.*', 'users.name', 'user_locations.scan', 'user_locations.fire', 'user_locations.coalplant', 'user_locations.gasplant', 'user_locations.sustainable');
 		}
 		return view('locations.teams', [
 			'user' => $user,

@@ -115,7 +115,7 @@ function initMap() {
 			l.marker.setAnimation(google.maps.Animation.BOUNCE);
         
 			addForm.prop('action', 'locations/edit/'+ l.id);
-			addForm.find('#qr').html(l.qr);
+			addForm.find('#qr').html(l.qr + l.id);
 			addForm.find('#lat').val(l.lat);
 			addForm.find('#lng').val(l.lng);
 			addForm.find('#name').val(l.name).focus();

@@ -43,8 +43,8 @@
 				
 				<td class="right">{{ $user->countScans() }}</td>
 				<td class="right">{{ $user->countFires() }}</td>
-				<td class="right">{{ $user->countCoalenergys() }}</td>
-				<td class="right">{{ $user->countGasenergys() }}</td>
+				<td class="right">{{ $user->countCoalplants() }}</td>
+				<td class="right">{{ $user->countGasplants() }}</td>
 				<td class="right">{{ $user->countSustainables() }}</td>
 			</tr>
 			@endforeach

@@ -26,8 +26,8 @@ class UserLocation extends Model {
     protected $dates = [
 		'scan',
 		'fire',
-		'coalenergy',
-		'gasenergy',
+		'coalplant',
+		'gasplant',
 		'sustainable'
 	];
     public static $costs = [
@@ -39,29 +39,29 @@ class UserLocation extends Model {
 			'ch4' => 0,
 			'si' => 0
 		],
-		'coalenergy' => [
-			'wood' => 6,
-			'coal' => 8,
-			'fe' => 2,
-			'al' => 0,
+		'coalplant' => [
+			'wood' => 0,
+			'coal' => 4,
+			'fe' => 6,
+			'al' => 1,
 			'ch4' => 0,
 			'si' => 0
 		],
-		'gasenergy' => [
-			'wood' => 4,
-			'coal' => 6,
-			'fe' => 3,
+		'gasplant' => [
+			'wood' => 0,
+			'coal' => 0,
+			'fe' => 2,
 			'al' => 3,
-			'ch4' => 0,
+			'ch4' => 4,
 			'si' => 0
 		],
 		'sustainable' => [
-			'wood' => 2,
-			'coal' => 6,
-			'fe' => 8,
-			'al' => 5,
-			'ch4' => 5,
-			'si' => 5
+			'wood' => 0,
+			'coal' => 0,
+			'fe' => 10,
+			'al' => 8,
+			'ch4' => 0,
+			'si' => 6
 		]
 	];
 	public function user() {

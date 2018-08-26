@@ -35,9 +35,9 @@ function initMap() {
 		@php
 			if($location->sustainable) {
 				$step = 4;
-			} else if($location->gasenergy) {
+			} else if($location->gasplant) {
 				$step = 3;
-			} else if($location->coalenergy) {
+			} else if($location->coalplant) {
 				$step = 2;
 			} else if($location->fire) {
 				$step = 1;

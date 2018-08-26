@@ -5,31 +5,36 @@
 
 <div class="content">
 <div class="background">
-<h1>Team {{ $user->name }} <img src="img/{{ strtolower($user->name) }}.png"></h1>
+<h1>Team {{ $user->name }}</h1>
 @if($winner)
 	@if($user->id == $winner->id)
-	<p class="floating-img clearfix"><img src="img/trophy.png">Gefeliciteerd! Jullie zijn vandaag de winnaars van het spel, met als eerste twee caf&eacute;s in Gorssel.<br />
+	<p class="floating-img clearfix"><img src="img/trophy.png">Gefeliciteerd! Jullie zijn vandaag de winnaars van het spel, met als eerste twee duurzame energie bronnen in je netwerk!<br />
 		Jullie mogen je "Kolonisten van Gorssel" noemen!</p>
 	@else
 	<p class="floating-img clearfix"><img src="img/failed.png">Helaas, team {{ $winner->name }} was jullie voor.<br />
-		Team {{ $winner->name }} mag zich nu "Kolonist van Gorssel" noemen!</p>
+		Team {{ $winner->name }} had als eerste twee duurzame bronnen in het netwerk!</p>
 	@endif
 @endif
 
-@if($user->countGasenergys())
-<p class="floating-img clearfix"><img src="img/medal.png">Ga naar De Hoek om een om te kijken hoe je van je B&amp;B straks een caf&eacute; moet maken.</p>
+@if($user->countGasplants())
+<p class="floating-img clearfix"><img src="img/gasplant.png">Nu heb je ook een gascentrale in je netwerk, nog een klein stapje te gaan en dan kun je ook duurzame bronnen aansluiten.</p>
 @endif
 
-@if($user->countCoalenergys())
-<p class="floating-img clearfix"><img src="img/gift.png">Ga naar Gusto om een versnapering op te halen ter ere van je eerste huis.</p>
+@if($user->countCoalplants())
+<p class="floating-img clearfix"><img src="img/coalplant.png">Een kolencentrale in je netwerk. Leuk, maar nog lang niet duurzaam, het geeft wel weer wat energie om meer grondstoffen te verzamelen.</p>
+@endif
+
+@if($user->countFires())
+<p class="floating-img clearfix"><img src="img/fire.png">Mooi! Jullie eerste vuur brandt, wat energie om meer grondstoffen te verzamelen.
+	Maar het is natuurlijk wel super inefficient en ouderweds, als e genoeg grondstoffen hebt verzameld kun je een kolencentrale bouwen.</p>
 @endif
 
 <p>Onder in beeld zie je steeds je voorraad grondstoffen, daarnaast heeft jullie team al de volgende energiebronnen.</p>
 <ul>
 	<li>{{ $user->countScans()==1?'1 locatie gevonden':$user->countScans() . ' locaties gevonden' }}</li>
 	<li>{{ $user->countFires()==1?'1 vuur ontstoken':$user->countFires() . ' vuren ontstoken' }}</li>
-	<li>{{ $user->countCoalenergys()==1?'1 kolencentrale aangesloten':$user->countCoalenergys() . ' kolencentrales aangesloten' }}</li>
-	<li>{{ $user->countGasenergys()==1?'1 gascentrale aangesloten':$user->countGasenergys() . ' gascentrales aangesloten' }}</li>
+	<li>{{ $user->countCoalplants()==1?'1 kolencentrale aangesloten':$user->countCoalplants() . ' kolencentrales aangesloten' }}</li>
+	<li>{{ $user->countGasplants()==1?'1 gascentrale aangesloten':$user->countGasplants() . ' gascentrales aangesloten' }}</li>
 	<li>{{ $user->countSustainables()==1?'1 duurzame energiebron aangesloten':$user->countSustainables() . ' duurzame energiebronnen aangesloten' }}</li>
 </ul>
 </div>

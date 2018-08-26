@@ -48,9 +48,9 @@ function initMap() {
 		@php
 			if($location->sustainable) {
 				$step = 4;
-			} else if($location->gasenergy) {
+			} else if($location->gasplant) {
 				$step = 3;
-			} else if($location->coalenergy) {
+			} else if($location->coalplant) {
 				$step = 2;
 			} else if($location->fire) {
 				$step = 1;
@@ -110,7 +110,7 @@ function initMap() {
 				$.alert({
 					theme: 'supervan',
 					title: 'Deze locatie is helmaal uitgebouwd',
-					content: 'Met dit caf&eacute; krijg je elke 3 minuten, 2 minuten, elke minuut en elke halve minuut een ' + elements[l.element] + ' erbij.',
+					content: 'Met deze duurzame energiebron krijg je er binnen 5 minuten 10 ' + elements[l.element] + ' bij.',
 					buttons: {
 						'Mooi, kom maar op met dat spul': stopAnimations
 					}
@@ -118,10 +118,10 @@ function initMap() {
 			} else if(l.step === 3) {
 				$.alert({
 					theme: 'supervan',
-					title: 'Caf&eacute; erbij op deze locatie?',
-					content: 'Met een caf&eacute; krijg je elke halve minuut een extra ' + elements[l.element] + ' erbij.' + 
+					title: 'Duurzame energiebron plaatsen op deze locatie?',
+					content: 'Duurzame energiebron krijg je er binnen 5 minuten 10 ' + elements[l.element] + ' bij.' +
 							'<div>Het uitbouwen kost:</div><div class="costs">' + costList('sustainable') + '</div>' +
-							(costCheck('sustainable') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
+							(costCheck('sustainable') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of zoek meer locaties om daar grondstroffen te vinden.'),
 					buttons: (costCheck('sustainable') ? {
 						'Ja, lijkt me super': function(){
 							location.href = '/users/build/' + l.id + '/sustainable';
@@ -134,13 +134,13 @@ function initMap() {
 			} else if(l.step === 2) {
 				$.alert({
 					theme: 'supervan',
-					title: 'Bed en breakfast erbij op deze locatie?',
-					content: 'Met een bed en breakfast krijg je elke minuut een extra ' + elements[l.element] + ' erbij.' + 
-							'<div>Het verbouwen kost:</div><div class="costs">' + costList('gasenergy') + '</div>' +
-							(costCheck('gasenergy') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('gasenergy') ? {
+					title: 'Gascentrale maken van deze locatie?',
+					content: 'Met een gascentrale krijg je er binnen 10 minuten 8 ' + elements[l.element] + ' bij.' +
+							'<div>Het verbouwen kost:</div><div class="costs">' + costList('gasplant') + '</div>' +
+							(costCheck('gasplant') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of zoek meer locaties om daar grondstroffen te vinden.'),
+					buttons: (costCheck('gasplant') ? {
 						'Ja, bouw maar uit': function(){
-							location.href = '/users/build/' + l.id + '/gasenergy';
+							location.href = '/users/build/' + l.id + '/gasplant';
 						},
 						'Nu nog niet': stopAnimations
 					} : {
@@ -150,13 +150,13 @@ function initMap() {
 			} else if(l.step === 1) {
 				$.alert({
 					theme: 'supervan',
-					title: 'Huis plaatsen op deze locatie?',
-					content: 'Met een huis krijg je elke 2 minuten een extra ' + elements[l.element] + ' erbij.' + 
-							'<div>Het bouwen kost:</div><div class="costs">' + costList('coalenergy') + '</div>' +
-							(costCheck('coalenergy') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
-					buttons: (costCheck('coalenergy') ? {
-						'Ja, hier wil ik een huis': function(){
-							location.href = '/users/build/' + l.id + '/coalenergy';
+					title: 'Kolencentrale plaatsen op deze locatie?',
+					content: 'Met een kolencentrale krijg je er binnen 15 minuten 6 ' + elements[l.element] + ' bij.' +
+							'<div>Het bouwen kost:</div><div class="costs">' + costList('coalplant') + '</div>' +
+							(costCheck('coalplant') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of zoek meer locaties om daar grondstroffen te vinden.'),
+					buttons: (costCheck('coalplant') ? {
+						'Ja, hier wil ik een kolencentrale': function(){
+							location.href = '/users/build/' + l.id + '/coalplant';
 						},
 						'Nu nog niet': stopAnimations
 					} : {
@@ -166,12 +166,12 @@ function initMap() {
 			} else if(l.step === 0) {
 				$.alert({
 					theme: 'supervan',
-					title: 'Vlag plaatsen op deze locatie?',
-					content: 'Met een vlag krijg je elke 3 minuten een ' + elements[l.element] + ' erbij.' + 
-							'<div>Het plaatsen kost:</div><div class="costs">' + costList('fire') + '</div>' +
-							(costCheck('fire') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of ga naar het roskamveldje om extra grondstoffen te verdienen.'),
+					title: 'Vuur maken op deze locatie?',
+					content: 'Met een vuur krijg er binnen 20 minuten 3 ' + elements[l.element] + ' bij.' +
+							'<div>Je hebt er voor nodig:</div><div class="costs">' + costList('fire') + '</div>' +
+							(costCheck('fire') ? '' : 'Op dit moment heb je niet genoeg grondstoffen. Probeer het later nog eens, of zoek meer locaties om daar grondstroffen te vinden.'),
 					buttons: (costCheck('fire') ? {
-						'Ja, planten dat ding': function(){
+						'Ja, ontsteken maar': function(){
 							location.href = '/users/build/' + l.id + '/fire';
 						},
 						'Nu nog niet': stopAnimations
@@ -183,7 +183,7 @@ function initMap() {
 				$.alert({
 					theme: 'supervan',
 					title: 'Vind eerst de code op deze locatie',
-					content: 'Heb je hem gevonden, en gescand, dan krijg je er meteen 2 grondstoffen bij, en kun je een vlag plaatsen.',
+					content: 'Heb je hem gevonden, en gescand, dan krijg je er meteen 2 grondstoffen bij, en kun je een vuur maken als je genoeg hout hebt.',
 					buttons: {
 						'Okay, we gaan al zoeken': stopAnimations
 					}

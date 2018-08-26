@@ -67,18 +67,25 @@ table td.right {
 	text-align: right;
 }
 
+table.teamscore th {
+	vertical-align: bottom;
+}
+table.teamscore th img {
+	width: 40px;
+	
+}
+
 th.rotate {
-	/* Something you can count on */
-	height: 60px;
+	height: 160px;
 	white-space: nowrap;
 }
 th.rotate > div {
 	transform: 
 	  /* Magic Numbers */
-	  translate(0px, 37px)
+	  translate(0px, -10px)
 	  /* 45 is really 360 - 45 */
 	  rotate(270deg);
-	width: 22px;
+	width: 40px;
 }
 th.rotate > div > span {
 	padding: 0 10px;
@@ -112,16 +119,16 @@ th.rotate > div > span {
 	top: 5px;
 	left: 5px;
 }
-#refresh #loader { fill: #EBE3CD }
-#refresh #border { fill: #8F7C74 }
+#refresh #loader { fill: #821e7d }
+#refresh #border { fill: #fff }
 
 #teams,
 #info {
 	position: fixed;
 	top: 5px;
 	right: 5px;
-	color: #8F7C74;
-	background: #EBE3CD;
+	color: #821e7d;
+	background: #fff;
 	height: 40px;
 	width: 40px;
 	border-radius: 20px;
