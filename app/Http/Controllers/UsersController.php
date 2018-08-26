@@ -370,25 +370,31 @@ class UsersController extends Controller
 	
 	public function index(Request $request) {
 		// $request;
+		if($request->has('print')) {
+			return view('users.print', [
+				'users' => User::orderBy('name')->get()
+			]);
+		} else {
+			return view('users.index', [
+				'users' => User::leftJoin('user_locations', function($join) {
+						$join->on('user_locations.user_id', '=', 'users.id');
+					})
+					->select(
+						'users.*',
+						\DB::raw('count(user_locations.sustainable) as sustainable'),
+						\DB::raw('count(user_locations.gasplant) as gasplant'),
+						\DB::raw('count(user_locations.coalplant) as coalplant'),
+						\DB::raw('count(user_locations.fire) as fire')
+					)
+					->orderByRaw('count(user_locations.sustainable) desc')
+					->orderByRaw('count(user_locations.gasplant) desc')
+					->orderByRaw('count(user_locations.coalplant) desc')
+					->orderByRaw('count(user_locations.fire) desc')
+					->orderByRaw('count(user_locations.id) desc')
+					->groupBy('users.id')->get()
+			]);
+		}
 		
-		return view('users.index', [
-			'users' => User::leftJoin('user_locations', function($join) {
-					$join->on('user_locations.user_id', '=', 'users.id');
-				})
-				->select(
-					'users.*',
-					\DB::raw('count(user_locations.sustainable) as sustainable'),
-					\DB::raw('count(user_locations.gasplant) as gasplant'),
-					\DB::raw('count(user_locations.coalplant) as coalplant'),
-					\DB::raw('count(user_locations.fire) as fire')
-				)
-				->orderByRaw('count(user_locations.sustainable) desc')
-				->orderByRaw('count(user_locations.gasplant) desc')
-				->orderByRaw('count(user_locations.coalplant) desc')
-				->orderByRaw('count(user_locations.fire) desc')
-				->orderByRaw('count(user_locations.id) desc')
-				->groupBy('users.id')->get()
-		]);
 	}
 	
 	public function add(Request $request) {

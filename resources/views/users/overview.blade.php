@@ -192,19 +192,25 @@ function initMap() {
         });
 	});
 	
-	var me = false;
+	var me = false,
+		meMarker;
 	function showPosition(position) {
 		me = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-		new google.maps.Marker({
-			position: me,
-			map: map,
-			icon: {
-				url: '{{ url('img/me.png') }}',
-				size: new google.maps.Size(20, 20),
-				origin: new google.maps.Point(0, 0),
-				anchor: new google.maps.Point(10, 10)
-			}
-		});
+		if(meMarker) {
+			meMarker.setPosition(me);
+			meMarker.setMap(map);
+		} else {
+			meMarker = new google.maps.Marker({
+				position: me,
+				map: map,
+				icon: {
+					url: '{{ url('img/me.png') }}',
+					size: new google.maps.Size(20, 20),
+					origin: new google.maps.Point(0, 0),
+					anchor: new google.maps.Point(10, 10)
+				}
+			});
+		}
 		var bounds = new google.maps.LatLngBounds();
 		bounds.extend(me);
 		$.each(locations, function() {
@@ -221,6 +227,9 @@ function initMap() {
     }
 	
 	function update() {
+		if(meMarker) {
+			meMarker.setMap(null);
+		}
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(showPosition);
 		}
