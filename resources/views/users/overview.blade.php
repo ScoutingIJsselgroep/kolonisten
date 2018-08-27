@@ -236,8 +236,30 @@ function initMap() {
 		$.getJSON(location.href, function(data) {
 			stopAnimations();
 			if(data.winner) {
-				location.href = '/team'
+				$.alert({
+					theme: 'supervan',
+					title: 'Er is een winnaar',
+					content: 'Bekijk de uitslagen.',
+					buttons: {
+						'Naar het klassement': function(){
+							location.href = '/team';
+						},
+						'Nog even doorgaan': stopAnimations
+					}
+				});
 			}
+			var d = new Date();
+			if (d.getTime() > 1535644800000) {
+				$.alert({
+					theme: 'supervan',
+					title: 'Tijd om terug te gaan',
+					content: 'Mocht je groep nog niet onderweg terug zijn, dan is het daar nu wel tijd voor. Pas op dat je niet te laat bent voor het eten.',
+					buttons: {
+						'Okay, we komen er aan': stopAnimations
+					}
+				});
+			}
+			
 			var bounds = new google.maps.LatLngBounds();
 			bounds.extend(new google.maps.LatLng(52.19994815375433, 6.215185941339087));
 			if(me) {

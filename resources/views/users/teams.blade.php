@@ -56,7 +56,7 @@
 			@endforeach
 		</tbody>
 	</table>
-	</form>
+	<p><a href="/team">Bekijk ook jullie eigen score</a></p>
 </div>
 </div>
 @endsection

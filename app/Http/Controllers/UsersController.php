@@ -201,11 +201,17 @@ class UsersController extends Controller
 				if(!$userLocation->fire) {
 					$userLocation->fire = Carbon::now();
 					$userLocation->save();
-					
-					return redirect()->to('/')->with([
-						'title' => 'Gefeliciteerd!',
-						'message' => 'Je ontvangt 3 ' . $location->elementName() . ' binnen 20 minuten'
-					]);
+					if($user->countFires()==1) {
+						return redirect()->to('/team')->with([
+							'title' => 'Gefeliciteerd!',
+							'message' => 'Het eerste vuur is ontstorken, energie om 3 ' . $location->elementName() . ' te krijgen binnen 20 minuten'
+						]);
+					} else {
+						return redirect()->to('/')->with([
+							'title' => 'Gefeliciteerd!',
+							'message' => 'Je ontvangt 3 ' . $location->elementName() . ' binnen 20 minuten'
+						]);
+					}
 				}
 			} else {
 				$otherUserLocation = UserLocation::where('user_id', '<>', $request->session()->get('user'))
@@ -273,7 +279,7 @@ class UsersController extends Controller
 						$userLocation->save();
 						
 						if($user->countSustainables() == 2) {
-							if($user->id == User::getWinner()) {
+							if($user == User::getWinner()) {
 								return redirect()->to('/team')->with([
 									'title' => 'Hulde!',
 									'message' => 'Jullie hebben het doel gehaald, en twee duurzame bronnen aangesloten!'
@@ -391,7 +397,7 @@ class UsersController extends Controller
 					->orderByRaw('count(user_locations.coalplant) desc')
 					->orderByRaw('count(user_locations.fire) desc')
 					->orderByRaw('count(user_locations.id) desc')
-					->groupBy('users.id')->get()
+					->orderBy('name')->groupBy('users.id')->get()
 			]);
 		}
 		

@@ -9,7 +9,7 @@
 @if($winner)
 	@if($user->id == $winner->id)
 	<p class="floating-img clearfix"><img src="img/trophy.png">Gefeliciteerd! Jullie zijn vandaag de winnaars van het spel, met als eerste twee duurzame energie bronnen in je netwerk!<br />
-		Jullie mogen je "Kolonisten van Gorssel" noemen!</p>
+		Jullie mogen je "de snelste verduurzamers" noemen!</p>
 	@else
 	<p class="floating-img clearfix"><img src="img/failed.png">Helaas, team {{ $winner->name }} was jullie voor.<br />
 		Team {{ $winner->name }} had als eerste twee duurzame bronnen in het netwerk!</p>
@@ -37,6 +37,8 @@
 	<li>{{ $user->countGasplants()==1?'1 gascentrale aangesloten':$user->countGasplants() . ' gascentrales aangesloten' }}</li>
 	<li>{{ $user->countSustainables()==1?'1 duurzame energiebron aangesloten':$user->countSustainables() . ' duurzame energiebronnen aangesloten' }}</li>
 </ul>
+
+<p><a href="/teams">Bekijk ook jullie score ten opzichte van de andere teams</a></p>
 </div>
 </div>
 @if($user)
